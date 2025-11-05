@@ -7,3 +7,4 @@ torch
 sentence-transformers
 librosa  
 joblib
+nltk
