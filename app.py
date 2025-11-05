@@ -38,7 +38,7 @@ def load_artifacts():
         # NOTE: Using the file names as they appear in your code
         vectorizer = joblib.load("tokenizer.pkl") 
         model = joblib.load('model_lr.pkl') 
-        emotion_labels = joblib.load('emotions_labels.pkl')
+        emotion_labels = joblib.load('emotion_labels.pkl')
         
         # Initialize NLTK components now that the resources are guaranteed to be downloaded
         stop_words = set(stopwords.words('english'))
@@ -114,7 +114,7 @@ def predict_emotion(text):
         st.error("Model structure not recognized. Cannot extract confidence scores.")
         return None
     # Add validation check for array lengths
-    len_labels = len(emotions_labels)
+    len_labels = len(emotion_labels)
     len_probas = len(all_probas)
     len_predictions = len(prediction_raw)
     
@@ -130,7 +130,7 @@ def predict_emotion(text):
         return None
     # Create a DataFrame for display
     results_df = pd.DataFrame({
-        'Emotion': emotions_labels,
+        'Emotion': emotion_labels,
         'Predicted': prediction_raw,
         'Confidence (%)': np.round(np.array(all_probas) * 100, 2)
     })
