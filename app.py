@@ -7,13 +7,14 @@ import string
 import nltk
 
 # --- NLTK Data Download Fix ---
-# This block ensures NLTK resources are available in the deployment environment.
+# CRITICAL: Fixes the LookupError by correctly downloading resources 
+# for a fresh deployment environment.
 try:
-    # Attempt to load the required data first (for performance on repeat runs)
+    # Attempt to load the required data first
     nltk.data.find('corpora/stopwords')
     nltk.data.find('corpora/wordnet')
-except nltk.downloader.DownloadError:
-    # If not found (common in fresh deployments), download them.
+except LookupError: 
+    # If the resource is not found, download them.
     nltk.download('stopwords', quiet=True)
     nltk.download('wordnet', quiet=True)
 
@@ -21,7 +22,6 @@ except nltk.downloader.DownloadError:
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 # --- End NLTK Fix ---
-
 
 # --- Configuration ---
 st.set_page_config(
@@ -35,10 +35,7 @@ st.set_page_config(
 def load_artifacts():
     """Loads the trained model, vectorizer, and emotion labels."""
     try:
-        # ⚠️ FIX 1: Corrected artifact names to match standard practice
-        # Your code used 'tokenizer.pkl', but this is likely the vectorizer.
-        # Your LFS error mentioned 'model_lr.pkl' and the prompt mentioned 'tfidf_vectorizer.pkl'.
-        # I am using the file names from the LFS error and the logic of your code.
+        # NOTE: Using the file names as they appear in your code
         vectorizer = joblib.load("tokenizer.pkl") 
         model = joblib.load('model_lr.pkl') 
         emotion_labels = joblib.load('emotion_labels.pkl')
@@ -52,12 +49,10 @@ def load_artifacts():
     except FileNotFoundError:
         st.error("""
             **Deployment Error: Model files not found!**
-            Please ensure you have all these files committed and correctly named:
-            - `tokenizer.pkl` (The TF-IDF Vectorizer)
-            - `model_lr.pkl` (The trained Logistic Regression Model)
-            - `emotion_labels.pkl` (The list of 28 labels)
-            
-            **If your files are named differently (e.g., `tfidf_vectorizer.pkl`), please update the filenames in this function.**
+            Please ensure these files are in your repository root and committed:
+            - `tokenizer.pkl`
+            - `model_lr.pkl` 
+            - `emotion_labels.pkl`
         """)
         st.stop()
 
@@ -104,7 +99,6 @@ def predict_emotion(text):
     clean_text = preprocess(text)
     
     # 2. Vectorize the clean text
-    # The vectorizer expects a list of documents
     text_vectorized = vectorizer.transform([clean_text])
     
     # 3. Get raw prediction (0 or 1 for each label)
@@ -112,16 +106,13 @@ def predict_emotion(text):
     
     # 4. Get probability estimates (from the underlying classifier)
     all_probas = []
-    # ⚠️ FIX 2: Check if model is a MultiOutputClassifier with estimators_
     if hasattr(model, 'estimators_'):
         for i, estimator in enumerate(model.estimators_):
-            # Predict_proba returns [prob_class_0, prob_class_1]
             proba = estimator.predict_proba(text_vectorized)[:, 1] 
             all_probas.append(proba[0])
     else:
-        # Fallback for models without estimators_ (e.g., if model was trained differently)
         st.error("Model structure not recognized. Cannot extract confidence scores.")
-        return None # Return None or handle error gracefully
+        return None
 
     # Create a DataFrame for display
     results_df = pd.DataFrame({
@@ -135,7 +126,6 @@ def predict_emotion(text):
         (results_df['Predicted'] == 1) | (results_df['Confidence (%)'] > 10)
     ]
     
-    # Sort by confidence
     results_df = results_df.sort_values(by='Confidence (%)', ascending=False)
     
     return results_df
@@ -171,7 +161,7 @@ if st.button("Analyze Emotion"):
             # Display the full confidence breakdown
             st.markdown("#### Confidence Breakdown")
             st.dataframe(
-                prediction_results.drop(columns=['Predicted']), # Don't show the raw 0/1 prediction
+                prediction_results.drop(columns=['Predicted']),
                 hide_index=True
             )
             
