@@ -113,7 +113,21 @@ def predict_emotion(text):
     else:
         st.error("Model structure not recognized. Cannot extract confidence scores.")
         return None
-
+    # Add validation check for array lengths
+    len_labels = len(emotion_labels)
+    len_probas = len(all_probas)
+    len_predictions = len(prediction_raw)
+    
+    if not (len_labels == len_probas == len_predictions):
+        st.error(f"""
+            **Data Length Mismatch Error: Cannot Create Results Table**
+            The number of emotion labels does not match the model's output size.
+            - Length of `emotion_labels.pkl`: {len_labels}
+            - Length of Model Predictions: {len_predictions}
+            
+            **Action Required:** You must re-save your `emotion_labels.pkl` file to ensure it contains the exact same number of labels ({len_predictions}) that your `model_lr.pkl` was trained to predict.
+        """)
+        return None
     # Create a DataFrame for display
     results_df = pd.DataFrame({
         'Emotion': emotion_labels,
