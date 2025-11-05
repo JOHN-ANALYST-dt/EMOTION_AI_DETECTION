@@ -1,0 +1,28 @@
+{
+  "os": "Windows-10-10.0.19045-SP0",
+  "python": "CPython 3.13.5",
+  "startedAt": "2025-11-04T22:55:21.053672Z",
+  "program": "c:\\Users\\user\\Desktop\\MENTAL_PRO\\emotions.ipynb",
+  "codePath": "c:\\Users\\user\\Desktop\\MENTAL_PRO\\emotions.ipynb",
+  "codePathLocal": "emotions.ipynb",
+  "git": {
+    "remote": "git@github.com:JOHN-ANALYST-dt/EMOTION_DETECTION_PROJECT.git",
+    "commit": "a45dff337fe3617846f2f6e869a36fc14c948295"
+  },
+  "email": "ongukajohn98@gmail.com",
+  "root": "c:\\Users\\user\\Desktop\\MENTAL_PRO",
+  "host": "DESKTOP-NSSKFMM",
+  "executable": "c:\\Users\\user\\anaconda3\\python.exe",
+  "cpu_count": 2,
+  "cpu_count_logical": 2,
+  "disk": {
+    "/": {
+      "total": "289694494720",
+      "used": "115967778816"
+    }
+  },
+  "memory": {
+    "total": "8404209664"
+  },
+  "writerId": "8ywdfrmgjgcoe8ruxbmwgbp1sbt71itd"
+}

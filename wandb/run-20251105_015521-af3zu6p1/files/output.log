@@ -1,0 +1,20 @@
+
+🏅 BEST MODEL PER METRIC
+
+Exact-match Accuracy → First Model          (0.5178)
+Macro F1             → BERT                 (0.3841)
+Micro F1             → BERT                 (0.5930)
+Macro Recall         → Logistic Regression  (0.5551)
+Micro Recall         → Logistic Regression  (0.6987)
+Hamming Loss         → BERT                 (0.0834)
+
+🏅 BEST MODEL PER METRIC
+
+Exact-match Accuracy → Naive Bayes          (0.5178)
+Macro F1             → BERT                 (0.3841)
+Micro F1             → BERT                 (0.5930)
+Macro Recall         → Logistic Regression  (0.5551)
+Micro Recall         → Logistic Regression  (0.6987)
+Hamming Loss         → BERT                 (0.0834)
+
+🏆 MODEL RANKING TABLE
