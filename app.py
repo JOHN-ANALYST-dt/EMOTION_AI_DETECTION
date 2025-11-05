@@ -24,6 +24,16 @@ from nltk.stem import WordNetLemmatizer
 # --- End NLTK Fix ---
 
 # --- Configuration ---
+
+
+PREDICTED_EMOTIONS = [
+    'anger', 
+    'disgust', 
+    'fear', 
+    'joy', 
+    'sadness', 
+    'surprise'
+]
 st.set_page_config(
     page_title="CareEmotion AI",
     layout="centered"
@@ -38,7 +48,7 @@ def load_artifacts():
         # NOTE: Using the file names as they appear in your code
         vectorizer = joblib.load("tokenizer.pkl") 
         model = joblib.load('model_lr.pkl') 
-        emotion_labels = joblib.load('emotion_labels.pkl')
+        emotion_labels = PREDICTED_EMOTIONS
         
         # Initialize NLTK components now that the resources are guaranteed to be downloaded
         stop_words = set(stopwords.words('english'))
