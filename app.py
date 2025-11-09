@@ -164,8 +164,7 @@ st.markdown("Enter a piece of text (like a Reddit comment) to classify the emoti
 user_input = st.text_area(
     "Enter Text Here:",
     placeholder="e.g., I am happy on 7/10 days",
-    height=150,
-    color="#E6652B"
+    height=150
 )
 
 # 2. Add an Analyze Button to trigger the check
@@ -177,7 +176,7 @@ if st.button("Check Input"):
     
     # 4. Check if the input contains ONLY numeric characters
     # We use .isnumeric() on the stripped input for the check.
-    
+
     elif user_input.strip().isnumeric():
         # Display the warning message to the user on the web page (using st.error or st.warning)
         st.error("Input must contain text, not only numbers. Please try again.")
