@@ -174,11 +174,11 @@ def predict_emotion(text):
 st.title("🧠 CareEmotion AI")
 st.markdown(
     """
-    <div style="text-align: center; color: black; font-size:20px; padding: 10px; border: 1px solid black; border-radius: 5px;">
+    <div style="text-align: center; color: black; font-size:70px; padding: 10px; border: 1px solid black; border-radius: 5px;">
         Understand Emotions in Text
-        <hr>
+        <h4>
         Our AI model analyzes text to detect emotional undertones with precision.<br> Enter any text below to discover its emotional fingerprint.
-        
+        </h4>
     </div>
     """, 
     unsafe_allow_html=True
