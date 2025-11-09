@@ -171,7 +171,7 @@ def predict_emotion(text):
 
 # --- 4. Streamlit UI Design ---
 
-st.title("🧠 CareEmotion Multi-Label Detector")
+st.title("🧠 CareEmotion AI - Advanced AI Emotion Detector")
 st.markdown("Enter a piece of text (like a Reddit comment) to classify the emotions it contains.")
 
 # Text input widget
