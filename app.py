@@ -162,17 +162,34 @@ st.markdown("Enter a piece of text (like a Reddit comment) to classify the emoti
 
 # Text input widget
 user_input = st.text_area(
-    input("Enter Text Here:",)
-    #check if input is only numbers 
-
-    if user_input.isnumeric():
-        print("input should contain text,not only numbers. Please try again.")
-    else:
-        print("thank you, your input is valid",user_input)
-        break    
-    
-
+    "Enter Text Here:",
+    placeholder="e.g., I am happy on 7/10 days",
+    height=150,
+    color="#E6652B"
 )
+
+# 2. Add an Analyze Button to trigger the check
+if st.button("Check Input"):
+    
+    # 3. Check for Empty Input
+    if not user_input.strip():
+        st.warning("Input is empty. Please enter some text.")
+    
+    # 4. Check if the input contains ONLY numeric characters
+    # We use .isnumeric() on the stripped input for the check.
+    
+    elif user_input.strip().isnumeric():
+        # Display the warning message to the user on the web page (using st.error or st.warning)
+        st.error("Input must contain text, not only numbers. Please try again.")
+    
+    # 5. The input is valid (contains text, potentially mixed with numbers)
+    else:
+        st.success("Thank you, your input is valid!")
+        
+        # Optionally display the validated input
+        st.write("Validated Input:")
+        st.code(user_input)
+
 
 if st.button("Analyze Emotion"):
     if user_input:
