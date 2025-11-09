@@ -170,9 +170,8 @@ def predict_emotion(text):
 
 
 # --- 4. Streamlit UI Design ---
-
+<div>
 st.title("🧠 CareEmotion AI")
-<hr>
 st.markdown(
     """
     <div style="text-align: center; color: black; font-size:50px; padding: 10px; border: 1px solid black; border-radius: 10px;font-weight: bold;">
@@ -255,4 +254,6 @@ if st.button("Analyze Emotion"):
 st.markdown("---")
 st.markdown(
     "This model is a multi-label classifier trained on the GoEmotions dataset."
+   
 )
+</div>

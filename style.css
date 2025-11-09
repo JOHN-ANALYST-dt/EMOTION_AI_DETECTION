@@ -25,5 +25,10 @@ h1 {
 .stButton>button:hover {
     background-color: #0056b3; /* Darker blue on hover */
 }
-      /* Add a small margin below the label */
-
+.st-emotion-cache-10qj61r { /* This class targets the label wrapper for text widgets */
+    /* Use !important to override Streamlit's default inline styles if necessary */
+    font-size: 1.5rem !important; /* Increase the font size (e.g., 1.5 times the base size) */
+    font-weight: 700;           /* Make it bold */
+    color: #007bff;             /* Give it a distinct color like blue */
+    margin-bottom: 5px;         /* Add a small margin below the label */
+}
