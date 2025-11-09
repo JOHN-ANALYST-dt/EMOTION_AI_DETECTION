@@ -34,6 +34,20 @@ PREDICTED_EMOTIONS = [
     'sadness', 
     'surprise'
 ]
+# --- CSS INJECTION FUNCTION ---
+def inject_custom_css(file_path):
+    """Reads a local CSS file and injects it into the Streamlit app."""
+    try:
+        with open(file_path) as f:
+            # st.markdown injects the CSS wrapped in <style> tags
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    except FileNotFoundError:
+        st.error(f"CSS file not found at path: {file_path}")
+    except Exception as e:
+        st.error(f"Error injecting CSS: {e}")
+
+# Call the function with the correct path to apply styles immediately
+inject_custom_css("styles/style.css")
 st.set_page_config(
     page_title="CareEmotion AI",
     layout="centered"

@@ -1,0 +1,27 @@
+
+/* Target the main app container for background styling */
+.stApp {
+    background-color: #f0f2f6; /* Light gray background */
+    background-attachment: fixed; /* Keeps background fixed when scrolling */
+}
+
+/* Target the Streamlit page title */
+h1 {
+    color: #4CAF50; /* A pleasant green color */
+    font-family: 'Arial', sans-serif;
+    border-bottom: 2px solid #4CAF50;
+    padding-bottom: 5px;
+}
+
+/* Target Streamlit buttons (using a class, or inspecting the element for the correct ID/class) */
+.stButton>button {
+    background-color: #007bff; /* Blue button */
+    color: white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+}
+
+.stButton>button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
