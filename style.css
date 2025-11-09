@@ -1,7 +1,7 @@
 
 /* Target the main app container for background styling */
 .stApp {
-    background-color: #0891b2; /* Light gray background */
+    background-color:skyblue; /* Light gray background */
     background-attachment: fixed; /* Keeps background fixed when scrolling */
 }
 
