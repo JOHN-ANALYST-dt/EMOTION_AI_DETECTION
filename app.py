@@ -171,8 +171,19 @@ def predict_emotion(text):
 
 # --- 4. Streamlit UI Design ---
 
-st.title("🧠 CareEmotion AI - Advanced AI Emotion Detector")
-st.markdown("Enter a piece of text (like a Reddit comment) to classify the emotions it contains.")
+st.title("🧠 CareEmotion AI")
+st.markdown(
+    """
+    <div style="text-align: center; color: #607d8b; font-size:20px; padding: 10px; border: 1px dashed #cfd8dc; border-radius: 5px;">
+        Understand Emotions in Text
+        <div style="text-align: center; color: #607d8b; font-size:15px; padding: 10px; border: 1px dashed #cfd8dc; border-radius: 5px;">
+        Our AI model analyzes text to detect emotional undertones with precision.<br> Enter any text below to discover its emotional fingerprint.
+        </div>
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
+#st.markdown("Enter a piece of text (like a Reddit comment) to classify the emotions it contains.")
 
 # Text input widget
 user_input = st.text_area(
