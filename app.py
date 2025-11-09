@@ -162,8 +162,16 @@ st.markdown("Enter a piece of text (like a Reddit comment) to classify the emoti
 
 # Text input widget
 user_input = st.text_area(
-    "Enter Text Here:",
-    "I was so excited when I saw the final result, but then I felt a little sad for the losers."
+    input("Enter Text Here:",)
+    #check if input is only numbers 
+
+    if user_input.isnumeric():
+        print("input should contain text,not only numbers. Please try again.")
+    else:
+        print("thank you, your input is valid",user_input)
+        break    
+    
+
 )
 
 if st.button("Analyze Emotion"):
