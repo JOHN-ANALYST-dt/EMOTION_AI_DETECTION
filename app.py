@@ -250,6 +250,81 @@ if st.button("Analyze Emotion"):
     else:
         st.warning("Please enter some text to analyze.")
 
+        ###data Preprocessing App###
+
+st.title("🗂️ CSV Data Preprocessor")
+st.markdown(
+    '<div class="caption-intro">Upload your CSV file and use the sidebar menu to apply preprocessing steps.</div>',
+    unsafe_allow_html=True
+)
+
+# --- File Uploader ---
+uploaded_file = st.file_uploader("Choose a CSV file...", type="csv")
+
+if uploaded_file is not None:
+    # 1. Initialization and Data Storage
+    df_key = 'current_df'
+    
+    # Check if a new file was uploaded or if the session is fresh
+    if df_key not in st.session_state or st.session_state['uploaded_file_name'] != uploaded_file.name:
+        st.session_state[df_key] = pd.read_csv(uploaded_file)
+        st.session_state['uploaded_file_name'] = uploaded_file.name
+        st.success(f"CSV file '{uploaded_file.name}' loaded successfully! Use the sidebar to begin.")
+        
+    df = st.session_state[df_key]
+    
+    st.write("---")
+    
+    # --- Sidebar Navigation (The Dropdown Menu) ---
+    st.sidebar.header("🛠️ Preprocessing Tools")
+    
+    # Use a dropdown to select the current task
+    processing_step = st.sidebar.selectbox(
+        "Select a step:",
+        options=[
+            "View Raw Data",
+            "1. Handle Missing Values", 
+            "2. Text Cleaning & Normalization"
+        ],
+        key='processing_step_select'
+    )
+    
+    st.sidebar.markdown("---")
+    
+    # --- Main Content Area Logic ---
+    
+    if processing_step == "View Raw Data":
+        st.subheader("🔍 Current Data View")
+        st.info(f"Loaded DataFrame has {df.shape[0]} rows and {df.shape[1]} columns.")
+        st.dataframe(df.head(20))
+        st.write("Use the sidebar menu to select a preprocessing task.")
+        
+    elif processing_step == "1. Handle Missing Values":
+        ui_handle_missing_values(df_key)
+        
+    elif processing_step == "2. Text Cleaning & Normalization":
+        ui_clean_text_data(df_key)
+
+
+    # --- Download Section (Always Visible) ---
+    st.markdown("---")
+    st.subheader("⬇️ Download Result")
+    st.write("Download the CSV with all applied modifications.")
+    
+    csv_buffer = StringIO()
+    # Use the modified DataFrame from session state
+    st.session_state[df_key].to_csv(csv_buffer, index=False)
+    
+    st.download_button(
+        label="Download Cleaned CSV",
+        data=csv_buffer.getvalue(),
+        file_name=f"cleaned_{st.session_state['uploaded_file_name']}",
+        mime="text/csv",
+    )
+    
+else:
+    st.info("Awaiting CSV file upload.")
+
 # Add a footer/info section
 st.markdown("---")
 st.markdown(
