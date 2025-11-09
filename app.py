@@ -47,7 +47,7 @@ def inject_custom_css(file_path):
         st.error(f"Error injecting CSS: {e}")
 
 # Call the function with the correct path to apply styles immediately
-inject_custom_css("styles/style.css")
+inject_custom_css("style.css")
 st.set_page_config(
     page_title="CareEmotion AI",
     layout="centered"
