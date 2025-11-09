@@ -172,6 +172,7 @@ def predict_emotion(text):
 # --- 4. Streamlit UI Design ---
 
 st.title("🧠 CareEmotion AI")
+<hr>
 st.markdown(
     """
     <div style="text-align: center; color: black; font-size:50px; padding: 10px; border: 1px solid black; border-radius: 10px;font-weight: bold;">
