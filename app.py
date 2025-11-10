@@ -189,7 +189,8 @@ bg_image = get_base64_image("happy.jpg")
 st.markdown(
     """
     <div class="main-title">
-        <h1>🧠 CareEmotion AI</h1>
+        <img class="image" src="happy.jpg" alt="CareEmotion AI Logo" width="80" height="80">
+        <h1>CareEmotion AI</h1>
         
     </div>
     
@@ -202,7 +203,7 @@ st.markdown(
     <div  class="caption-intro">
         Understand Emotions in Text
         <h4>
-        Our AI model analyzes text to detect emotional undertones with precision. Enter any text below to discover its emotional fingerprint.
+        Our AI model analyzes text to detect emotional undertones with precision.Discover  emotional fingerprint.
         </h4>
     </div>
     """, 
