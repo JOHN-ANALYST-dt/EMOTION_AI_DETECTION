@@ -45,6 +45,7 @@ h1 {
 }
 .main-title {
     position: fixed;
+     z-index: 9999;  
     text-align: center;
     color: white;
     padding: 100px 20px;
