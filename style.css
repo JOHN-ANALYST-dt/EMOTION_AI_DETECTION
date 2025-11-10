@@ -85,3 +85,15 @@ h1 {
     
 }
 
+
+    .arrow-pointer {
+        font-size: 28px;
+        color: #4CAF50;
+        animation: bounce 1.5s infinite;
+        text-align: center;
+    }
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+    }
+

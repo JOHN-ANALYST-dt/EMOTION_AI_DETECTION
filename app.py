@@ -210,7 +210,10 @@ st.markdown(
     unsafe_allow_html=True
 )
 #st.markdown("Enter a piece of text (like a Reddit comment) to classify the emotions it contains.")
-
+st.markdown(
+    '<div class="arrow-pointer">⬇️ Type your text below ⬇️</div>',
+    unsafe_allow_html=True
+)
 # Text input widget
 user_input = st.text_area(
     "Enter Text Here:",
