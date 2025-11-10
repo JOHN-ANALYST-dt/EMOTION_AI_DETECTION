@@ -47,12 +47,13 @@ h1 {
     position: relative; 
     text-align: center;
     color: white;
+    
     padding: 80px 10px;
     border-radius: 10px;
     margin-bottom: 5px;
     background-image: 
         linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.65)),
-        url('https://www.istockphoto.com/photo/summer-smile-gm481419852-69547911');
+        url('{bg_image}');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;

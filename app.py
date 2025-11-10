@@ -185,6 +185,7 @@ def get_base64_image(image_path):
 bg_image = get_base64_image("happy.jpg")
 
 
+
 st.markdown(
     """
     <div class="main-title">
