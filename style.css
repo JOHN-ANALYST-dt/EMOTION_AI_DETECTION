@@ -39,7 +39,6 @@ h1 {
     font-size: 20px;
     padding: 10px;
     border: 2px solid black;
-    border-radius: 10px;
     font-weight: bold;
     background-color: #f0f0f0; /* Light background for better readability */
 }
@@ -52,7 +51,7 @@ h1 {
     margin-bottom: 5px;
     background-image: 
         linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.65)),
-        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80');
+        url('https://www.google.com/imgres?q=african%20happy%20children&imgurl=https%3A%2F%2Fmedia.gettyimages.com%2Fid%2F481419852%2Fphoto%2Fsummer-smile.jpg%3Fs%3D612x612%26w%3Dgi%26k%3D20%26c%3DP_CgHoj06v3YiS237Hq7ntTwHY8Sf6lCS8IpoH3QC6s%3D&imgrefurl=https%3A%2F%2Fwww.gettyimages.com%2Fphotos%2Fafrican-child-face-smiling&docid=T3cgn4ZqFnn--M&tbnid=KJTwoxfDybcHQM&vet=12ahUKEwjFj5yY8eeQAxU6SEEAHX2ONksQM3oECCMQAA..i&w=612&h=408&hcb=2&ved=2ahUKEwjFj5yY8eeQAxU6SEEAHX2ONksQM3oECCMQAA');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
