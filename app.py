@@ -173,8 +173,14 @@ def predict_emotion(text):
 
 # --- 4. Streamlit UI Design ---
 
-st.title(
-    '<div class="main-title">CareEmotion AI</div>',
+
+st.title("""
+    <div class="main-title">
+        <h1>🧠 CareEmotion AI</h1>
+        <h3>Detect. Understand. Feel the Power of Emotion Intelligence in Text</h3>
+</div>
+    
+    """,
     unsafe_allow_html=True
 )
 st.markdown(
