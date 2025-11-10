@@ -85,7 +85,20 @@ h1 {
     
 }
 
-
+.custom-textarea {
+        font-size: 20px !important;
+        font-family: "Poppins", sans-serif;
+        color: #1a1a1a;
+        background-color: #f8f9fa;
+        border: 2px solid #4CAF50;
+        border-radius: 12px;
+        padding: 12px;
+        transition: all 0.3s ease-in-out;
+    }
+    .custom-textarea:focus {
+        border-color: #2e7d32;
+        box-shadow: 0 0 10px rgba(46, 125, 50, 0.3);
+    }
     .arrow-pointer {
         font-size: 28px;
         color: #4CAF50;

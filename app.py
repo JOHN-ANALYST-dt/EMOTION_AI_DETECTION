@@ -221,6 +221,19 @@ user_input = st.text_area(
     height=150
 )
 
+st.markdown(
+    """
+    <script>
+    // Apply custom CSS class to Streamlit textarea
+    var textareas = window.parent.document.querySelectorAll('textarea');
+    if (textareas.length > 0) {
+        textareas[textareas.length - 1].classList.add('custom-textarea');
+    }
+    </script>
+    """,
+    unsafe_allow_html=True
+)
+
 # 2. Add an Analyze Button to trigger the check
 if st.button("Check Input"):
     
