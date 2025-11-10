@@ -190,7 +190,6 @@ st.markdown(
 # Text input widget
 user_input = st.text_area(
     "Enter Text Here:",
-    time.sleep(1.2),
     placeholder="e.g., Hello world! I am so excited to learn about Machine Learning 😊",
     height=150
 )
