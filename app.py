@@ -190,7 +190,7 @@ st.markdown(
     """
     
     <div class="main-title">
-         <div><h2>Pride lands SDA</h2></div>
+         <div><h4>Pride lands SDA</h4></div>
         <h1>CareEmotion AI</h1>
     </div>
     
