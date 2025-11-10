@@ -253,7 +253,7 @@ if st.button("Analyze Emotion"):
         st.warning("Please enter some text to analyze.")
 
         ###data Preprocessing App###
-        
+
 # --- 5. Data Preprocessing UI Functions (The Fix for NameError) ---
 
 def ui_handle_missing_values(df_key):
@@ -310,7 +310,7 @@ def ui_clean_text_data(df_key):
     to a selected column in the DataFrame.
     """
     df = st.session_state[df_key]
-    st.subheader("✨ 2. Text Cleaning & Normalization")
+    st.subheader(" 2. Text Cleaning & Normalization")
     st.markdown("Applies the full preprocessing pipeline: remove emojis, HTML, numbers, lowercase, remove punctuation, lemmatization, and stop word removal.")
     
     # Identify text columns (simplistic check)
@@ -371,7 +371,10 @@ def ui_clean_text_data(df_key):
 
 ###data Preprocessing App###
 
-st.title("🗂️ CSV Data Preprocessor")
+with st.container(border=True): # border=True adds a visible boundary
+    st.header(" Dedicated Data Preprocessor Tool")
+
+st.title(" CSV Text Data Preprocessor")
 st.markdown(
     '<div class="caption-intro">Upload your CSV file and use the sidebar menu to apply preprocessing steps.</div>',
     unsafe_allow_html=True
