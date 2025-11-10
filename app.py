@@ -178,7 +178,7 @@ st.markdown(
     """
     <div class="main-title">
         <h1>🧠 CareEmotion AI</h1>
-        <h3>Detect. Understand. Feel the Power of Emotion Intelligence in Text</h3>
+        
     </div>
     
     """,
