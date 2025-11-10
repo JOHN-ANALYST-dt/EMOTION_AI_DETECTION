@@ -182,14 +182,14 @@ def get_base64_image(image_path):
     return f"data:image/jpeg;base64,{encoded}"
 
 # Load your local image and embed it into CSS
-bg_image = get_base64_image("images/happy.JPG")
+bg_image = get_base64_image("images/happy2.JPG")
 
 
 
 st.markdown(
     """
     <div class="main-title">
-        <img class="image" src="images/happy.JPG" alt="CareEmotion AI Logo" width="80" height="80">
+        
         <h1>CareEmotion AI</h1>
         
     </div>
