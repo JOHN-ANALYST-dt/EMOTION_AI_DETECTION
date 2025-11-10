@@ -51,7 +51,7 @@ h1 {
     border-radius: 15px;
     background-image: 
         linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.65)),
-        url('https://unsplash.com/photos/close-up-photography-of-girl-ZzE9uKOAchc');
+        url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -84,7 +84,6 @@ h1 {
     }
     
 }
-
 .custom-textarea {
         font-size: 20px !important;
         font-family: "Poppins", sans-serif;
