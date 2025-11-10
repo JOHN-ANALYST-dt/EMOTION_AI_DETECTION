@@ -44,8 +44,7 @@ h1 {
     background-color: #f0f0f0; /* Light background for better readability */
 }
 .main-title {
-    position: fixed;
-     z-index: 9999;  
+    position: absolute; 
     text-align: center;
     color: white;
     padding: 100px 20px;
