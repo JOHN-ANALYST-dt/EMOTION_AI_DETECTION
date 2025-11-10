@@ -5,6 +5,8 @@ import numpy as np
 import re
 import string
 import nltk
+from io import StringIO
+import sys
 
 # --- NLTK Data Download Fix ---
 # CRITICAL: Fixes the LookupError by correctly downloading resources 
@@ -251,6 +253,123 @@ if st.button("Analyze Emotion"):
         st.warning("Please enter some text to analyze.")
 
         ###data Preprocessing App###
+        
+# --- 5. Data Preprocessing UI Functions (The Fix for NameError) ---
+
+def ui_handle_missing_values(df_key):
+    """
+    UI and logic for handling missing values in the DataFrame.
+    """
+    df = st.session_state[df_key]
+    st.subheader("🧹 1. Handle Missing Values")
+    
+    # Show initial state
+    missing_summary = df.isnull().sum()
+    missing_data = missing_summary[missing_summary > 0]
+    
+    if missing_data.empty:
+        st.success("✅ No missing values found in the DataFrame!")
+    else:
+        st.warning(f"⚠️ Found missing values in {len(missing_data)} column(s).")
+        st.dataframe(missing_data.rename("Missing Count"))
+        
+        st.markdown("#### Select Strategy")
+        
+        col_to_clean = st.selectbox(
+            "Select Column to Handle Missing Values (Only columns with NaNs shown):",
+            options=["-- Select a Column --"] + missing_data.index.tolist()
+        )
+        
+        if col_to_clean != "-- Select a Column --":
+            strategy = st.radio(
+                f"Choose a strategy for **{col_to_clean}**:",
+                options=["Drop Rows", "Fill with a value (e.g., 'unknown')", "Fill with Mode/Mean/Median (for numeric/categorical)"]
+            )
+            
+            if st.button("Apply Missing Value Strategy"):
+                new_df = df.copy() # Work on a copy
+                
+                if strategy == "Drop Rows":
+                    new_df.dropna(subset=[col_to_clean], inplace=True)
+                    st.session_state[df_key] = new_df
+                    st.success(f"Successfully dropped rows with missing values in **{col_to_clean}**.")
+                    st.dataframe(new_df.head())
+                    
+                elif strategy == "Fill with a value (e.g., 'unknown')":
+                    fill_value = st.text_input("Enter value to fill NaNs with:", value="unknown")
+                    new_df[col_to_clean].fillna(fill_value, inplace=True)
+                    st.session_state[df_key] = new_df
+                    st.success(f"Successfully filled missing values in **{col_to_clean}** with **'{fill_value}'**.")
+                    st.dataframe(new_df.head())
+                
+                # Add more complex strategies here if needed
+
+def ui_clean_text_data(df_key):
+    """
+    UI and logic for applying the defined text preprocessing function 
+    to a selected column in the DataFrame.
+    """
+    df = st.session_state[df_key]
+    st.subheader("✨ 2. Text Cleaning & Normalization")
+    st.markdown("Applies the full preprocessing pipeline: remove emojis, HTML, numbers, lowercase, remove punctuation, lemmatization, and stop word removal.")
+    
+    # Identify text columns (simplistic check)
+    text_columns = df.select_dtypes(include=['object']).columns.tolist()
+    
+    if not text_columns:
+        st.error("No suitable text columns (object dtype) found in the DataFrame.")
+        return
+    
+    col_to_clean = st.selectbox(
+        "Select Text Column to Clean:",
+        options=text_columns
+    )
+    
+    # Option to create a new column or overwrite
+    cleaning_action = st.radio(
+        "Cleaning Action:",
+        options=["Create New Column", "Overwrite Existing Column"],
+        key='cleaning_action_radio'
+    )
+    
+    new_col_name = col_to_clean + "_clean"
+    if cleaning_action == "Create New Column":
+        new_col_name = st.text_input("New Column Name:", value=new_col_name)
+
+    # Make the preprocess function accessible with its dependencies
+    # The original function was 'def preprocess(text):' and used globals.
+    # The updated version 'def preprocess(text, stop_words, lemmatizer, emoji_pattern):' is safer.
+    # We now access the global NLTK components defined in load_artifacts()
+    
+    if st.button(f"Apply Preprocessing to **{col_to_clean}**"):
+        try:
+            with st.spinner(f"Cleaning text in column **{col_to_clean}**... This may take a moment."):
+                
+                # Apply the preprocessing function (passing the required global artifacts)
+                processed_series = df[col_to_clean].apply(
+                    lambda x: preprocess(x, stop_words, lemmatizer, emoji_pattern)
+                )
+
+            # Update the DataFrame in session state
+            if cleaning_action == "Overwrite Existing Column":
+                st.session_state[df_key][col_to_clean] = processed_series
+                st.success(f"Successfully **overwrote** column **{col_to_clean}** with cleaned text.")
+            else:
+                st.session_state[df_key][new_col_name] = processed_series
+                st.success(f"Successfully created new column **{new_col_name}** with cleaned text.")
+
+            # Show a preview of the changes
+            st.markdown("#### Preview of Cleaned Data")
+            if cleaning_action == "Overwrite Existing Column":
+                st.dataframe(st.session_state[df_key][[col_to_clean]].head(10))
+            else:
+                st.dataframe(st.session_state[df_key][[col_to_clean, new_col_name]].head(10))
+
+        except Exception as e:
+            st.error(f"An error occurred during cleaning: {e}")
+
+
+###data Preprocessing App###
 
 st.title("🗂️ CSV Data Preprocessor")
 st.markdown(
@@ -300,9 +419,11 @@ if uploaded_file is not None:
         st.write("Use the sidebar menu to select a preprocessing task.")
         
     elif processing_step == "1. Handle Missing Values":
+        # NOW THIS FUNCTION IS DEFINED
         ui_handle_missing_values(df_key)
         
     elif processing_step == "2. Text Cleaning & Normalization":
+        # AND THIS FUNCTION IS DEFINED
         ui_clean_text_data(df_key)
 
 
