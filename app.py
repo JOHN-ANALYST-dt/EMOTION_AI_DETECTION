@@ -182,7 +182,7 @@ def get_base64_image(image_path):
     return f"data:image/jpeg;base64,{encoded}"
 
 # Load your local image and embed it into CSS
-bg_image = get_base64_image("images/happy2.jpg")
+bg_image = get_base64_image("images/happy2.png")
 
 
 
@@ -214,7 +214,7 @@ st.markdown(
 # Text input widget
 user_input = st.text_area(
     "Enter Text Here:",
-    placeholder="e.g., Hello world! I am so excited to learn about Machine Learning 😊",
+    placeholder="e.g., Hello church! God is good😊",
     height=150
 )
 
