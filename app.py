@@ -216,7 +216,6 @@ st.markdown(
 )
 # Text input widget
 user_input = st.text_area(
-    "Enter Text Here:",
     placeholder="e.g., Hello church! God is good😊",
     height=150
 )
