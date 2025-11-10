@@ -203,7 +203,7 @@ st.markdown(
     <div  class="caption-intro">
         Understand Emotions in Text
         <h4>
-        Our AI model analyzes text to detect emotional undertones with precision.Discover  emotional fingerprint.
+        Our AI model analyzes text to detect emotional undertones with precision
         </h4>
     </div>
     """, 
