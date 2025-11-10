@@ -189,7 +189,7 @@ bg_image = get_base64_image("happy.jpg")
 st.markdown(
     """
     <div class="main-title">
-        <img class="image" src="happy.jpg" alt="CareEmotion AI Logo" width="80" height="80">
+        <img class="image" src="images/happy.jpg" alt="CareEmotion AI Logo" width="80" height="80">
         <h1>CareEmotion AI</h1>
         
     </div>
