@@ -370,14 +370,15 @@ st.sidebar.markdown(
 voice_results_placeholder = st.sidebar.empty()
 
 # --- UI for Voice Recording ---
-ctx = webrtc_streamer(
-    key="speech_emotion_detector",
-    mode=WebRtcMode.SENDONLY,
-    audio_processor_factory=AudioAnalysisProcessor,
-    media_stream_constraints={"video": False, "audio": True},
-    async_processing=True,
+with st.sidebar:
+    ctx = webrtc_streamer(
+        key="speech_emotion_detector",
+        mode=WebRtcMode.SENDONLY,
+        audio_processor_factory=AudioAnalysisProcessor,
+        media_stream_constraints={"video": False, "audio": True},
+        async_processing=True,
     # Place in sidebar by defining the container context
-    container=st.sidebar
+
 )
 
 # Logic to run analysis after recording stops
