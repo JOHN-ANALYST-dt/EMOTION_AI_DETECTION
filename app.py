@@ -395,11 +395,11 @@ with st.sidebar:
         async_processing=True,
         rtc_configuration=RTC_CONFIGURATION,
 
-)
+    )
 
-if ctx.state.playing:
+    if ctx.state.playing:
         st_webrtc_status.success("🟢 **Recording/Streaming** (Click **Stop** on the widget to pause)")
-else:
+    else:
         # Show a prompt to the user when the widget is visible but not running
         st_webrtc_status.info("🎤 Click the **Start** button above to begin recording.")
 
