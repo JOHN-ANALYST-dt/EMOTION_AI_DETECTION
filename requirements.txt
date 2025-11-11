@@ -1,10 +1,9 @@
 streamlit>=1.30
 SpeechRecognition
 streamlit-webrtc
-pyaudio
 pandas
 numpy
-scikit-learn==1.6.1
+scikit-learn==[VERIFY_MODEL_TRAINED_VERSION]
 transformers
 torch
 sentence-transformers
