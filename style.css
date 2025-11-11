@@ -108,4 +108,9 @@ h1 {
         0%, 100% { transform: translateY(0); }
         50% { transform: translateY(-8px); }
     }
-
+.text{
+    font-size: small;
+    color: #888;
+    text-align: center;
+    
+}

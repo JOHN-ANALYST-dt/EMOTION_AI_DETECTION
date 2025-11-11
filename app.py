@@ -209,7 +209,7 @@ st.markdown(
     """, 
     unsafe_allow_html=True
 )
-#st.markdown("Enter a piece of text (like a Reddit comment) to classify the emotions it contains.")
+
 st.markdown(
     '<div class="arrow-pointer">⬇️ Type your text below ⬇️</div>',
     unsafe_allow_html=True
@@ -242,7 +242,7 @@ if st.button("Check Input"):
         st.warning("Input is empty. Please enter some text.")
     
     # 4. Check if the input contains ONLY numeric characters
-    # We use .isnumeric() on the stripped input for the check.
+  
 
     elif user_input.strip().isnumeric():
         # Display the warning message to the user on the web page (using st.error or st.warning)
@@ -295,9 +295,9 @@ if st.button("Analyze Emotion"):
         ###data Preprocessing App###
 
 
-# =======================================================
-# --- VOICE PROCESSING FUNCTIONS (NEW) ---
-# =======================================================
+
+#--- VOICE PROCESSING FUNCTIONS (NEW) ---
+
 
 def raw_pcm_to_wav_bytes(raw_audio_data, sample_rate=44100, num_channels=1):
     """Converts a raw NumPy array (s16le) to a WAV file in BytesIO."""
@@ -344,27 +344,26 @@ class AudioAnalysisProcessor(AudioProcessorBase):
         self.audio_frames.append(frame.to_ndarray(format="s16le")) 
         return frame
 
-# =======================================================
+
 # --- Sidebar UI (Voice Recognition & Preprocessor Navigation) ---
-# =======================================================
+
 
 # --- Voice Recording and Analysis (NEW SECTION, Aligned Left) ---
 st.sidebar.subheader("🎙️ Voice Analyzer (STT)")
 st.sidebar.markdown(
     """
-    <p style='font-size: small; color: #888;'>
+    <p class="text">
     Use your microphone to record speech for text analysis.
     </p>
     """, unsafe_allow_html=True
 )
 
 voice_results_placeholder = st.sidebar.empty()
-# =======================================================
+
 # --- Initialization and Global Configuration ---
 # Must be defined outside of any Streamlit block (like st.sidebar or st.button)
-# =======================================================
 
-# RTC Configuration including STUN (public) and TURN (private, with credentials)
+
 RTC_CONFIGURATION = {
     "iceServers": [
         {"urls": ["stun:stun.l.google.com:19302"]},
@@ -410,10 +409,10 @@ with st.sidebar:
         st_webrtc_status.info("🎤 Click the **Start** button above to begin recording.")
 
 
-# =======================================================
+
 # --- Logic to Save Audio Frames to Session State (Correct) ---
 # Runs when stream is stopped and frames are available.
-# =======================================================
+
 if not ctx.state.playing and ctx.audio_processor and ctx.audio_processor.audio_frames:
     
     # Check that we actually have audio data before saving
@@ -430,10 +429,10 @@ if not ctx.state.playing and ctx.audio_processor and ctx.audio_processor.audio_f
         ctx.audio_processor.audio_frames.clear()
 
 
-# =======================================================
-# --- Logic to run analysis after recording stops (FIXED) ---
+
+
 # Now relies entirely on the saved session state data.
-# =======================================================
+
 if st.sidebar.button("Analyze Recorded Voice", use_container_width=True, key="voice_analyze_btn"):
     
     # Clear previous results
