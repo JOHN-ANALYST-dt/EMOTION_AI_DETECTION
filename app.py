@@ -416,6 +416,29 @@ with st.sidebar:
 
 
 
+#Save Audio Frames to Session State ---
+# This block saves the frames to memory when the stream is NOT playing 
+# and frames are available (i.e., immediately after the user clicks 'Stop').
+# =======================================================
+if not ctx.state.playing and ctx.audio_processor and ctx.audio_processor.audio_frames:
+    # 1. Concatenate all frames into one raw NumPy array
+    raw_audio_data = np.concatenate(ctx.audio_processor.audio_frames, axis=0)
+    
+    # 2. Convert PCM data to WAV format bytes
+    wav_bytes = raw_pcm_to_wav_bytes(raw_audio_data)
+    
+    # 3. SAVE THE WAV BYTES TO SESSION STATE (Memory preservation across runs)
+    st.session_state['recorded_audio_data'] = wav_bytes
+    
+    # 4. CLEAR THE FRAMES from the processor to prevent appending to the next recording
+    ctx.audio_processor.audio_frames.clear()
+    
+    st.sidebar.success("✅ Recording complete. Ready for analysis.")
+
+
+
+
+
 # Logic to run analysis after recording stops
 if st.sidebar.button("Analyze Recorded Voice", use_container_width=True, key="voice_analyze_btn"):
     
