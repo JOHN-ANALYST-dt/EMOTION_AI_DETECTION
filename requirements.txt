@@ -1,4 +1,6 @@
-streamlit>=1.30
+speechrecognition
+streamlit-webrtc
+pyaudiostreamlit>=1.30
 pandas
 numpy
 scikit-learn
@@ -8,5 +10,4 @@ sentence-transformers
 librosa  
 joblib
 nltk
-streamlit-webrtc 
-speech_recognition
+streamlit-webrtc
