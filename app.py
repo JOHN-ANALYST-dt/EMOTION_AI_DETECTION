@@ -385,7 +385,7 @@ with st.sidebar:
     # Indicate that the connection process has started
     st_webrtc_status.info("🎤 Waiting for microphone...")
 
-    st_webrtc_status = st.empty()
+    #st_webrtc_status = st.empty()
     ctx = webrtc_streamer(
         key="speech_emotion_detector",
         mode=WebRtcMode.SENDONLY,
