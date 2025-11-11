@@ -375,7 +375,9 @@ RTC_CONFIGURATION = {
         {"urls": ["stun:stun1.l.google.com:19302"]},
         {"urls": ["stun:stun2.l.google.com:19302"]},
         {"urls": ["stun:stun3.l.google.com:19302"]},
-    ]
+    ],
+    "iceCandidatePoolSize": 2, # Smaller pool size can speed up gathering
+    "iceConnectionTimeout": 5000
 }
 
 # --- UI for Voice Recording ---
