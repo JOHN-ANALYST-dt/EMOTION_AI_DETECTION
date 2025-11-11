@@ -372,34 +372,28 @@ RTC_CONFIGURATION = {
         {"urls": ["stun:stun2.l.google.com:19302"]},
         {"urls": ["stun:stun3.l.google.com:19302"]},
         {
-            # **NOTE**: This TURN server requires Xirsys to be active and credentials valid
             "urls": ["turn:global.xirsys.net:3478?transport=udp"],
             "username": "Onguka",
             "credential": "John@3567",
         }
     ],
-    "iceCandidatePoolSize": 2, # Smaller pool size can speed up gathering
+    "iceCandidatePoolSize": 2, 
 }
 
-# Initialize session state for recorded audio data (Memory retention)
+# Initialize session state for recorded audio data ---
 if 'recorded_audio_data' not in st.session_state:
     st.session_state['recorded_audio_data'] = None
 
-# Placeholder for analysis results (assuming this is defined near the top of your script)
-# voice_results_placeholder = st.sidebar.empty()
-
-# =======================================================
-# --- UI for Voice Recording (Sidebar Block) ---
-# =======================================================
-
+# --- UI for Voice Recording ---
 with st.sidebar:
-    # Assuming st.sidebar.subheader/markdown for '🎙️ Voice Analyzer (STT)' is just above this block
-
+    # ... (st.subheader and st.markdown go here)
+    voice_results_placeholder = st.empty() # Placeholder for results (moved from top for completeness)
+    
     # 1. Create an empty element to display connection status
     st_webrtc_status = st.empty()
     st_webrtc_status.info("🎤 Waiting for microphone...")
     
-    # 2. RENDER THE WIDGET
+
     ctx = webrtc_streamer(
         key="speech_emotion_detector",
         mode=WebRtcMode.SENDONLY,
@@ -407,60 +401,56 @@ with st.sidebar:
         media_stream_constraints={"video": False, "audio": True},
         async_processing=True,
         rtc_configuration=RTC_CONFIGURATION,
+
     )
 
-    # 3. DYNAMIC STATUS UPDATE
     if ctx.state.playing:
         st_webrtc_status.success("🟢 **Recording/Streaming** (Click **Stop** on the widget to pause)")
     else:
         st_webrtc_status.info("🎤 Click the **Start** button above to begin recording.")
 
+
 # =======================================================
-# --- Logic to Save Audio Frames to Session State ---
-# This runs after the stream is stopped, saving the memory before analysis.
+# --- Logic to Save Audio Frames to Session State (Correct) ---
+# Runs when stream is stopped and frames are available.
 # =======================================================
 if not ctx.state.playing and ctx.audio_processor and ctx.audio_processor.audio_frames:
     
-    # Check for presence of audio frames before processing
+    # Check that we actually have audio data before saving
     if len(ctx.audio_processor.audio_frames) > 0:
-        # 1. Concatenate all frames into one raw NumPy array
         raw_audio_data = np.concatenate(ctx.audio_processor.audio_frames, axis=0)
-        
-        # 2. Convert PCM data to WAV format bytes
         wav_bytes = raw_pcm_to_wav_bytes(raw_audio_data)
         
-        # 3. SAVE THE WAV BYTES TO SESSION STATE (Memory preservation)
         st.session_state['recorded_audio_data'] = wav_bytes
-        
-        # 4. CLEAR THE FRAMES from the processor for the next recording
         ctx.audio_processor.audio_frames.clear()
         
         st.sidebar.success("✅ Recording complete. Ready for analysis.")
     else:
-        # Clear status if stream stopped but no frames were captured (e.g., immediate stop)
+        # Clear frames even if empty, but don't save to state
         ctx.audio_processor.audio_frames.clear()
 
 
 # =======================================================
-# --- Logic to run analysis after recording stops (MODIFIED) ---
-# This now uses the saved session state data.
+# --- Logic to run analysis after recording stops (FIXED) ---
+# Now relies entirely on the saved session state data.
 # =======================================================
 if st.sidebar.button("Analyze Recorded Voice", use_container_width=True, key="voice_analyze_btn"):
     
     # Clear previous results
     voice_results_placeholder.empty()
 
-    # --- NEW: Retrieve saved audio data from session state ---
+    # --- FIX: Check for saved data instead of raw frames ---
     wav_bytes_to_analyze = st.session_state.get('recorded_audio_data')
 
     if wav_bytes_to_analyze is None:
-        voice_results_placeholder.warning("Please record and stop the voice stream before clicking 'Analyze'.")
+        # Warning if no audio was saved
+        voice_results_placeholder.warning("Please record your voice and click the STOP button on the widget before analyzing.")
         
     else:
         with voice_results_placeholder.container():
             with st.spinner("Transcribing and analyzing text..."):
                 
-                # 1. Transcribe the audio using the SAVED bytes
+                # Use the saved WAV bytes directly for transcription
                 transcribed_text = transcribe_audio(wav_bytes_to_analyze)
                 
                 st.subheader("Transcription")
@@ -472,15 +462,6 @@ if st.sidebar.button("Analyze Recorded Voice", use_container_width=True, key="vo
                     st.success("Transcription successful!")
                     st.caption("Text:")
                     st.code(transcribed_text, language='text')
-                    
-                    # Clear session state memory after use
-                    st.session_state['recorded_audio_data'] = None
-                    
-                    # 2. Analyze the transcribed text using existing tools
-                    st.markdown("---")
-                    st.subheader("Emotion Analysis")
-                    
-                    # ... (Continue with your prediction logic using predict_emotion(transcribed_text))
                     
                     # 4. Analyze the transcribed text using existing tools
                     st.markdown("---")
