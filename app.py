@@ -5,6 +5,15 @@ import numpy as np
 import re
 import string
 import nltk
+import os
+import io
+from io import StringIO
+import sys
+import wave
+
+#voice processing libraries
+import speech_recognition as sr
+from streamlit_webrtc import webrtc_streamer, AudioProcessorBase, WebRtcMode
 from io import StringIO
 import sys
 
@@ -294,7 +303,144 @@ if st.button("Analyze Emotion"):
 
         ###data Preprocessing App###
 
-# --- 5. Data Preprocessing UI Functions (The Fix for NameError) ---
+
+# =======================================================
+# --- VOICE PROCESSING FUNCTIONS (NEW) ---
+# =======================================================
+
+def raw_pcm_to_wav_bytes(raw_audio_data, sample_rate=44100, num_channels=1):
+    """Converts a raw NumPy array (s16le) to a WAV file in BytesIO."""
+    buffer = io.BytesIO()
+    with wave.open(buffer, 'wb') as wf:
+        wf.setnchannels(num_channels)
+        wf.setsampwidth(2)  # 16-bit audio (2 bytes per sample)
+        wf.setframerate(sample_rate)
+        # raw_audio_data is 1D for mono, need to ensure it's in the right format
+        if raw_audio_data.dtype != np.int16:
+            raw_audio_data = raw_audio_data.astype(np.int16)
+        wf.writeframes(raw_audio_data.tobytes())
+    return buffer.getvalue()
+
+def transcribe_audio(wav_bytes):
+    """Transcribes audio data using Google's free Web Speech API."""
+    r = sr.Recognizer()
+    
+    # Use AudioFile class which can read from a file-like object (BytesIO)
+    with io.BytesIO(wav_bytes) as audio_io:
+        try:
+            with sr.AudioFile(audio_io) as source:
+                # Adjust for ambient noise and capture the audio data
+                audio = r.record(source)  
+
+            # Use the Google Web Speech API for transcription
+            text = r.recognize_google(audio)
+            return text
+        except sr.UnknownValueError:
+            return "Could not understand audio. Please speak clearly."
+        except sr.RequestError as e:
+            return f"Could not request results from Google Speech Recognition service; {e}"
+        except Exception as e:
+            return f"An unexpected error occurred during audio processing: {e}"
+
+# --- Audio Processor Class for Streamlit-webrtc ---
+class AudioAnalysisProcessor(AudioProcessorBase):
+    def __init__(self):
+        # We store the raw PCM frames
+        self.audio_frames = []
+        
+    def recv(self, frame):
+        # frame.to_ndarray() converts the frame to a NumPy array (s16le, 16-bit PCM)
+        self.audio_frames.append(frame.to_ndarray(format="s16le")) 
+        return frame
+
+# =======================================================
+# --- Sidebar UI (Voice Recognition & Preprocessor Navigation) ---
+# =======================================================
+
+# --- Voice Recording and Analysis (NEW SECTION, Aligned Left) ---
+st.sidebar.subheader("🎙️ Voice Analyzer (STT)")
+st.sidebar.markdown(
+    """
+    <p style='font-size: small; color: #888;'>
+    Use your microphone to record speech for text analysis.
+    </p>
+    """, unsafe_allow_html=True
+)
+
+voice_results_placeholder = st.sidebar.empty()
+
+# --- UI for Voice Recording ---
+ctx = webrtc_streamer(
+    key="speech_emotion_detector",
+    mode=WebRtcMode.SENDONLY,
+    audio_processor_factory=AudioAnalysisProcessor,
+    media_stream_constraints={"video": False, "audio": True},
+    async_processing=True,
+    # Place in sidebar by defining the container context
+    container=st.sidebar
+)
+
+# Logic to run analysis after recording stops
+if st.sidebar.button("Analyze Recorded Voice", use_container_width=True, key="voice_analyze_btn"):
+    
+    # Clear previous results
+    voice_results_placeholder.empty()
+
+    if not ctx or not ctx.audio_processor or not ctx.audio_processor.audio_frames:
+        voice_results_placeholder.warning("Please record some voice audio first.")
+        
+    else:
+        with voice_results_placeholder.container():
+            with st.spinner("Processing audio..."):
+                
+                # 1. Concatenate the audio chunks into one numpy array
+                raw_audio_data = np.concatenate(ctx.audio_processor.audio_frames, axis=0)
+                
+                # 2. Convert PCM data to WAV format bytes
+                wav_bytes = raw_pcm_to_wav_bytes(raw_audio_data)
+                
+                # 3. Transcribe the audio
+                transcribed_text = transcribe_audio(wav_bytes)
+                
+                st.subheader("Transcription")
+                
+                if "Could not understand audio" in transcribed_text or "Could not request results" in transcribed_text:
+                    st.error(transcribed_text)
+                
+                else:
+                    st.success("Transcription successful!")
+                    st.caption("Text:")
+                    st.code(transcribed_text, language='text')
+                    
+                    # 4. Analyze the transcribed text using existing tools
+                    st.markdown("---")
+                    st.subheader("Emotion Analysis")
+                    
+                    #prediction of the trascribed text
+                    prediction_results = predict_emotion(transcribed_text)
+                    
+                    if prediction_results is not None and not prediction_results.empty:
+                        predicted_emotions = prediction_results[prediction_results['Predicted'] == 1]['Emotion'].tolist()
+                        
+                        if predicted_emotions:
+                            st.success(f"**Detected:** {', '.join([e.title() for e in predicted_emotions])}")
+                        else:
+                            st.info("No strong single emotion predicted.")
+
+                        st.markdown("##### Confidence")
+                        st.dataframe(
+                            prediction_results[['Emotion', 'Confidence (%)']].head(3),
+                            hide_index=True
+                        )
+                        
+                    else:
+                        st.warning("Text classification model not available or text was too short/unclear.")
+
+
+
+
+
+# --- Data Preprocessing UI Functions (The Fix for NameError) ---
 
 def ui_handle_missing_values(df_key):
     """
