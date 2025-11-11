@@ -369,6 +369,15 @@ st.sidebar.markdown(
 
 voice_results_placeholder = st.sidebar.empty()
 
+RTC_CONFIGURATION = {
+    "iceServers": [
+        {"urls": ["stun:stun.l.google.com:19302"]},
+        {"urls": ["stun:stun1.l.google.com:19302"]},
+        {"urls": ["stun:stun2.l.google.com:19302"]},
+        {"urls": ["stun:stun3.l.google.com:19302"]},
+    ]
+}
+
 # --- UI for Voice Recording ---
 with st.sidebar:
     ctx = webrtc_streamer(
@@ -377,6 +386,9 @@ with st.sidebar:
         audio_processor_factory=AudioAnalysisProcessor,
         media_stream_constraints={"video": False, "audio": True},
         async_processing=True,
+        rtc_configuration=RTC_CONFIGURATION,
+        video_frame_callback=None
+        
     # Place in sidebar by defining the container context
 
 )
