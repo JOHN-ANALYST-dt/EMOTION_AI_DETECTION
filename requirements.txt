@@ -9,4 +9,4 @@ librosa
 joblib
 nltk
 streamlit-webrtc 
-speech_recognition 
+speech_recognition
