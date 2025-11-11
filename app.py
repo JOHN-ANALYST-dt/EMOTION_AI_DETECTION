@@ -380,6 +380,12 @@ RTC_CONFIGURATION = {
 
 # --- UI for Voice Recording ---
 with st.sidebar:
+    #------1. Create an empty element to display connection status--------
+
+    # Indicate that the connection process has started
+    st_webrtc_status.info("🎤 Waiting for microphone...")
+
+    st_webrtc_status = st.empty()
     ctx = webrtc_streamer(
         key="speech_emotion_detector",
         mode=WebRtcMode.SENDONLY,
@@ -387,11 +393,18 @@ with st.sidebar:
         media_stream_constraints={"video": False, "audio": True},
         async_processing=True,
         rtc_configuration=RTC_CONFIGURATION,
-        video_frame_callback=None
-        
-    # Place in sidebar by defining the container context
 
 )
+# --- 2. DYNAMIC STATUS UPDATE ---
+    # After the streamer widget is rendered, check its state
+    if ctx.state.playing:
+        st_webrtc_status.success("🟢 **Recording/Streaming** (Click Stop or Analyze to finish)")
+    else:
+        # Restore the waiting message if the connection is not yet established or is off
+        st_webrtc_status.info("🎤 Click **Start** to begin recording.")
+
+
+
 
 # Logic to run analysis after recording stops
 if st.sidebar.button("Analyze Recorded Voice", use_container_width=True, key="voice_analyze_btn"):
