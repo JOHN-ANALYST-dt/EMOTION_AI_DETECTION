@@ -253,8 +253,7 @@ div.st-emotion-cache-1pxx9r4 {
 .gold-title {
             font-size: 24px;
             font-weight: 700;
-            background: linear-gradient(90deg, var(--gold-light), var(--gold-dark));
-            
+           
             -webkit-text-fill-color: transparent;
 }
 
@@ -263,4 +262,5 @@ div.st-emotion-cache-1pxx9r4 {
             color: var(--text-grey);
             line-height: 1.65;
             margin-top: 10px;
-            margin-bottom: 10px;}
+            margin-bottom: 10px;
+}
