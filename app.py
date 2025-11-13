@@ -603,7 +603,7 @@ def ui_clean_text_data(df_key):
                 
                 # Apply the preprocessing function (passing the required global artifacts)
                 processed_series = df[col_to_clean].apply(
-                    lambda x: preprocess(x, stop_words, lemmatizer, emoji_pattern)#x, stop_words, lemmatizer, emoji_pattern
+                    lambda x: preprocess(x)#x, stop_words, lemmatizer, emoji_pattern
                 )
 
             # Update the DataFrame in session state
