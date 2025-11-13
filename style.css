@@ -114,3 +114,14 @@ h1 {
     text-align: center;
     
 }
+
+div.st-emotion-cache-1pxx9r4 { 
+    gap: 0.5rem; 
+   
+}
+
+/* Another class name that might control the main space */
+.st-emotion-cache-n3xgrt {
+    padding-left: 0rem;
+    padding-right: 0rem;
+}

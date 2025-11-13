@@ -279,7 +279,7 @@ if st.button("Analyze Emotion"):
                 st.info("No strong single emotion predicted. Showing top confidence scores.")
 
 
-            col1, col2 = st.columns([2, 1])
+            col1, col2 = st.columns([2, 1.5])
             with col1:
 
                 # Display the full confidence breakdown
