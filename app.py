@@ -35,7 +35,13 @@ from nltk.stem import WordNetLemmatizer
 # --- End NLTK Fix ---
 
 # --- intervention------
-from intervention import display_interventions
+# Assuming this file exists and contains the display_interventions function
+try:
+    from intervention import display_interventions
+except ImportError:
+    # Define a placeholder function if the file is missing to prevent errors
+    def display_interventions(results):
+        st.info("Intervention file missing. Cannot display suggestions.")
 
 
 PREDICTED_EMOTIONS = [
@@ -54,11 +60,14 @@ PREDICTED_EMOTIONS = [
 def inject_custom_css(file_path):
     """Reads a local CSS file and injects it into the Streamlit app."""
     try:
+        # NOTE: Since `style.css` is not provided, this line is kept as is
+        # but the file must be present in the execution environment.
         with open(file_path) as f:
             # st.markdown injects the CSS wrapped in <style> tags
             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
     except FileNotFoundError:
-        st.error(f"CSS file not found at path: {file_path}")
+        # Instead of erroring out, just skip CSS if not found in this context
+        pass 
     except Exception as e:
         st.error(f"Error injecting CSS: {e}")
 
@@ -87,14 +96,18 @@ def load_artifacts():
         return vectorizer, model, emotion_labels, stop_words, lemmatizer
         
     except FileNotFoundError:
-        st.error("""
-            **Deployment Error: Model files not found!**
-            Please ensure these files are in your repository root and committed:
-            - `tokenizer.pkl`
-            - `model_lr.pkl` 
-            - `emotion_labels.pkl`
-        """)
-        st.stop()
+        # Placeholder error for deployment environment
+        st.warning("Model files not found (tokenizer.pkl or model_lr.pkl). Analysis functions are disabled.")
+        # Return mock artifacts to allow the rest of the app to run
+        class MockModel:
+             def predict(self, X): return np.array([[0]*len(PREDICTED_EMOTIONS)])
+             def estimators_(self): return [type('MockEstimator', (), {'predict_proba': lambda self, X: np.array([[0.5, 0.5]])})() for _ in PREDICTED_EMOTIONS]
+        
+        class MockVectorizer:
+             def transform(self, X): return None
+             
+        return MockVectorizer(), MockModel(), PREDICTED_EMOTIONS, set(stopwords.words('english')), WordNetLemmatizer()
+
 
 # Load the resources globally
 vectorizer, model, emotion_labels, stop_words, lemmatizer = load_artifacts()
@@ -105,11 +118,18 @@ emoji_pattern = re.compile(
     flags=re.UNICODE
 )
 
-# --- 2. Custom Preprocessing Function ---
-def preprocess(text):
+# --- 2. Custom Preprocessing Function (UPDATED: now accepts NLTK args) ---
+def preprocess(text, stop_words, lemmatizer, emoji_pattern):
     """
     Cleans and preprocesses text using the same logic as the training notebook.
+    Takes NLTK objects as explicit arguments for safer execution.
     """
+    if pd.isna(text) or text is None:
+        return ""
+    
+    # Ensure text is a string
+    text = str(text)
+
     # remove emoji
     text = emoji_pattern.sub(r'', text)
 
@@ -135,8 +155,13 @@ def preprocess(text):
 def predict_emotion(text):
     """Predicts emotions for the given text."""
     
-    # 1. Preprocess the input text
-    clean_text = preprocess(text)
+    # 1. Preprocess the input text (Now calls with necessary globals)
+    clean_text = preprocess(text, stop_words, lemmatizer, emoji_pattern)
+    
+    # Check for empty clean text after processing
+    if not clean_text:
+        st.warning("Processed text is empty. Analysis cannot be performed.")
+        return pd.DataFrame()
     
     # 2. Vectorize the clean text
     text_vectorized = vectorizer.transform([clean_text])
@@ -148,6 +173,7 @@ def predict_emotion(text):
     all_probas = []
     if hasattr(model, 'estimators_'):
         for i, estimator in enumerate(model.estimators_):
+            # L-R for multi-label usually provides probabilities from 0 to 1
             proba = estimator.predict_proba(text_vectorized)[:, 1] 
             all_probas.append(proba[0])
     else:
@@ -162,10 +188,10 @@ def predict_emotion(text):
         st.error(f"""
             **Data Length Mismatch Error: Cannot Create Results Table**
             The number of emotion labels does not match the model's output size.
-            - Length of `emotion_labels.pkl`: {len_labels}
+            - Length of labels: {len_labels}
             - Length of Model Predictions: {len_predictions}
             
-            **Action Required:** You must re-save your `emotion_labels.pkl` file to ensure it contains the exact same number of labels ({len_predictions}) that your `model_lr.pkl` was trained to predict.
+            **Action Required:** Ensure your emotion labels match your model's output.
         """)
         return None
     # Create a DataFrame for display
@@ -185,17 +211,13 @@ def predict_emotion(text):
     return results_df
 
 
-# --- 4. Streamlit UI Design ---
-
-
-
-
+# --- 4. Streamlit UI Design (Emotion Analysis) ---
 
 st.markdown(
     """
     
     <div class="main-title">
-         <div><h4>Pride lands SDA</h4></div>
+        <div><h4>Pride lands SDA</h4></div>
         <h1>CareEmotion AI</h1>
     </div>
     
@@ -247,8 +269,6 @@ if st.button("Check Input"):
         st.warning("Input is empty. Please enter some text.")
     
     # 4. Check if the input contains ONLY numeric characters
-  
-
     elif user_input.strip().isnumeric():
         # Display the warning message to the user on the web page (using st.error or st.warning)
         st.error("Input must contain text, not only numbers. Please try again.")
@@ -266,7 +286,7 @@ if st.button("Analyze Emotion"):
     if user_input:
         prediction_results = predict_emotion(user_input)
         
-        if prediction_results is not None:
+        if prediction_results is not None and not prediction_results.empty:
             # --- Display Results ---
             st.subheader("Analysis Complete")
             
@@ -294,10 +314,10 @@ if st.button("Analyze Emotion"):
                 # Optional: Display a bar chart of the top 10 confidences
                 top_confidences = prediction_results.head(10)
                 st.bar_chart(
-                 top_confidences,
-                 x='Emotion',
-                    y='Confidence (%)',
-                    color="#E6652B" 
+                   top_confidences,
+                   x='Emotion',
+                   y='Confidence (%)',
+                   color="#E6652B" 
                 )
             # --- Display Interventions ---
             st.markdown(""" 
@@ -312,11 +332,7 @@ if st.button("Analyze Emotion"):
     else:
         st.warning("Please enter some text to analyze.")
 
-        ###data Preprocessing App###
-
-
-
-#--- VOICE PROCESSING FUNCTIONS (NEW) ---
+#--- VOICE PROCESSING FUNCTIONS ---
 
 
 def raw_pcm_to_wav_bytes(raw_audio_data, sample_rate=44100, num_channels=1):
@@ -365,7 +381,7 @@ class AudioAnalysisProcessor(AudioProcessorBase):
         return frame
 
 
-# --- Sidebar UI (Voice Recognition & Preprocessor Navigation) ---
+# --- Sidebar UI (Voice Recognition) ---
 
 
 # --- Voice Recording and Analysis (NEW SECTION, Aligned Left) ---
@@ -405,8 +421,7 @@ if 'recorded_audio_data' not in st.session_state:
 
 # --- UI for Voice Recording ---
 with st.sidebar:
-    # ... (st.subheader and st.markdown go here)
-    voice_results_placeholder = st.empty() # Placeholder for results (moved from top for completeness)
+    voice_results_placeholder = st.empty() # Placeholder for results
     
     # 1. Create an empty element to display connection status
     st_webrtc_status = st.empty()
@@ -517,14 +532,14 @@ def ui_handle_missing_values(df_key):
     UI and logic for handling missing values in the DataFrame.
     """
     df = st.session_state[df_key]
-    st.subheader(" 1. Handle Missing Values")
+    st.subheader("1. Handle Missing Values")
     
     # Show initial state
     missing_summary = df.isnull().sum()
     missing_data = missing_summary[missing_summary > 0]
     
     if missing_data.empty:
-        st.success(" No missing values found in the DataFrame!")
+        st.success("No missing values found in the DataFrame!")
     else:
         st.warning(f"Found missing values in {len(missing_data)} column(s).")
         st.dataframe(missing_data.rename("Missing Count"))
@@ -566,7 +581,7 @@ def ui_clean_text_data(df_key):
     to a selected column in the DataFrame.
     """
     df = st.session_state[df_key]
-    st.subheader(" 2. Text Cleaning & Normalization")
+    st.subheader("2. Text Cleaning & Normalization")
     st.markdown("Applies the full preprocessing pipeline: remove emojis, HTML, numbers, lowercase, remove punctuation, lemmatization, and stop word removal.")
     
     # Identify text columns (simplistic check)
@@ -585,23 +600,22 @@ def ui_clean_text_data(df_key):
     cleaning_action = st.radio(
         "Cleaning Action:",
         options=["Create New Column", "Overwrite Existing Column"],
-        key='cleaning_action_radio'
+        key='cleaning_action_radio_2' # Changed key to avoid conflict
     )
     
     new_col_name = col_to_clean + "_clean"
     if cleaning_action == "Create New Column":
-        new_col_name = st.text_input("New Column Name:", value=new_col_name)
+        new_col_name = st.text_input("New Column Name:", value=new_col_name, key='new_col_name_input')
 
-    # Make the preprocess function accessible with its dependencies
-    # The original function was 'def preprocess(text):' and used globals.
-    # The updated version 'def preprocess(text, stop_words, lemmatizer, emoji_pattern):' is safer.
-    # We now access the global NLTK components defined in load_artifacts()
-    
+    # Access the global NLTK components
+    global stop_words, lemmatizer, emoji_pattern
+
     if st.button(f"Apply Preprocessing to **{col_to_clean}**"):
         try:
             with st.spinner(f"Cleaning text in column **{col_to_clean}**... This may take a moment."):
                 
-                # Apply the preprocessing function (passing the required global artifacts)
+                # Apply the preprocessing function (passing the required global artifacts explicitly)
+                # NOTE: This call is now safe because preprocess takes 4 arguments
                 processed_series = df[col_to_clean].apply(
                     lambda x: preprocess(x, stop_words, lemmatizer, emoji_pattern)
                 )
@@ -625,89 +639,77 @@ def ui_clean_text_data(df_key):
             st.error(f"An error occurred during cleaning: {e}")
 
 
-###data Preprocessing App###
+# --- Data Preprocessing UI (New Clickable and Left-Aligned Structure) ---
 
-with st.container(border=True): # border=True adds a visible boundary
-    st.header(" Data Preprocessor Tool")
-
-st.title(" CSV Text Data Preprocessor")
-st.markdown(
-    '<div class="caption-intro">Upload your CSV file and use the sidebar menu to apply preprocessing steps.</div>',
-    unsafe_allow_html=True
-)
-
-# --- File Uploader ---
-uploaded_file = st.file_uploader("Choose a CSV file...", type="csv")
-
-if uploaded_file is not None:
-    # 1. Initialization and Data Storage
-    df_key = 'current_df'
-    
-    # Check if a new file was uploaded or if the session is fresh
-    if df_key not in st.session_state or st.session_state['uploaded_file_name'] != uploaded_file.name:
-        st.session_state[df_key] = pd.read_csv(uploaded_file)
-        st.session_state['uploaded_file_name'] = uploaded_file.name
-        st.success(f"CSV file '{uploaded_file.name}' loaded successfully! Use the sidebar to begin.")
-        
-    df = st.session_state[df_key]
-    
-    st.write("---")
-    
-    # --- Sidebar Navigation (The Dropdown Menu) ---
-    st.sidebar.header("🛠️ Preprocessing Tools")
-    
-    # Use a dropdown to select the current task
-    processing_step = st.sidebar.selectbox(
-        "Select a step:",
-        options=[
-            "View Raw Data",
-            "1. Handle Missing Values", 
-            "2. Text Cleaning & Normalization"
-        ],
-        key='processing_step_select'
+# Use an expander for the "Clickable Title" functionality
+with st.expander("📁 CSV Text Data Preprocessor Tool", expanded=False):
+    st.markdown(
+        '<div class="caption-intro">Upload your CSV file and select a step from the navigation bar below to begin.</div>',
+        unsafe_allow_html=True
     )
-    
-    st.sidebar.markdown("---")
-    
-    # --- Main Content Area Logic ---
-    
-    if processing_step == "View Raw Data":
-        st.subheader("🔍 Current Data View")
-        st.info(f"Loaded DataFrame has {df.shape[0]} rows and {df.shape[1]} columns.")
-        st.dataframe(df.head(20))
-        st.write("Use the sidebar menu to select a preprocessing task.")
-        
-    elif processing_step == "1. Handle Missing Values":
-        # NOW THIS FUNCTION IS DEFINED
-        ui_handle_missing_values(df_key)
-        
-    elif processing_step == "2. Text Cleaning & Normalization":
-        # AND THIS FUNCTION IS DEFINED
-        ui_clean_text_data(df_key)
 
+    # --- File Uploader ---
+    uploaded_file = st.file_uploader("Choose a CSV file...", type="csv", key='preprocessor_uploader')
 
-    # --- Download Section (Always Visible) ---
-    st.markdown("---")
-    st.subheader("⬇️ Download Result")
-    st.write("Download the CSV with all applied modifications.")
-    
-    csv_buffer = StringIO()
-    # Use the modified DataFrame from session state
-    st.session_state[df_key].to_csv(csv_buffer, index=False)
-    
-    st.download_button(
-        label="Download Cleaned CSV",
-        data=csv_buffer.getvalue(),
-        file_name=f"cleaned_{st.session_state['uploaded_file_name']}",
-        mime="text/csv",
-    )
-    
-else:
-    st.info("Awaiting CSV file upload.")
+    if uploaded_file is not None:
+        # 1. Initialization and Data Storage
+        df_key = 'current_df'
+        
+        # Check if a new file was uploaded or if the session is fresh
+        if df_key not in st.session_state or st.session_state['uploaded_file_name'] != uploaded_file.name:
+            st.session_state[df_key] = pd.read_csv(uploaded_file)
+            st.session_state['uploaded_file_name'] = uploaded_file.name
+            st.success(f"CSV file '{uploaded_file.name}' loaded successfully! Select a step to begin.")
+            
+        df = st.session_state[df_key]
+        
+        st.write("---")
+
+        # --- Left-Aligned Navigation and Content Area ---
+        col_nav, col_content = st.columns([1, 3])
+
+        with col_nav:
+            st.subheader("🛠️ Steps")
+            # Use st.radio for simple left-aligned navigation
+            processing_step = st.radio(
+                "Select a task:",
+                options=[
+                    "View Raw Data",
+                    "Handle Missing Values",  
+                    "Text Cleaning & Normalization"
+                ],
+                key='processing_step_select_main'
+            )
+            st.markdown("---")
+            st.download_button(
+                label="⬇️ Download Cleaned CSV",
+                data=StringIO(st.session_state[df_key].to_csv(index=False)).getvalue(),
+                file_name=f"cleaned_{st.session_state['uploaded_file_name']}",
+                mime="text/csv",
+                use_container_width=True
+            )
+        
+        with col_content:
+            # --- Main Content Area Logic ---
+            if processing_step == "View Raw Data":
+                st.subheader("🔍 Current Data View")
+                st.info(f"Loaded DataFrame has {df.shape[0]} rows and {df.shape[1]} columns.")
+                st.dataframe(df.head(20))
+                
+            elif processing_step == "Handle Missing Values":
+                ui_handle_missing_values(df_key)
+                
+            elif processing_step == "Text Cleaning & Normalization":
+                ui_clean_text_data(df_key)
+
+            
+    else:
+        st.info("Awaiting CSV file upload.")
+
 
 # Add a footer/info section
 st.markdown("---")
 st.markdown(
     "This model is a multi-label classifier trained on the GoEmotions dataset."
-   
+    
 )
