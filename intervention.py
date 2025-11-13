@@ -341,7 +341,7 @@ def display_interventions(prediction_results):
         # Use expanders for clean dropdowns for the advice domains
         st.markdown("##### Here are some helpful strategies to manage this emotion:")
 
-        advice_domains = ['Mental', 'Physical', 'Spiritual']
+        advice_domains = ['Mental', 'Physical', 'Spiritual', 'Diet']
         for domain in advice_domains:
             advice_list = intervention_data.get(domain, [])
             if advice_list:
