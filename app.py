@@ -286,7 +286,7 @@ if st.button("Analyze Emotion"):
                 st.markdown("#### Confidence Breakdown")
                 st.dataframe(
                 prediction_results.drop(columns=['Predicted']),
-                hide_index=True
+                hide_index=True,
                 width=400,
                 height=300
                 )
