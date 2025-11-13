@@ -630,15 +630,15 @@ def ui_clean_text_data(df_key):
 with st.container(border=True): # border=True adds a visible boundary
     st.header("""
               
-              <div class="gold-container">
+        <div class="gold-container">
 
-                 <div class="gold-header">
+                <div class="gold-header">
                      <img class="gold-icon" 
                          src="https://www.svgrepo.com/show/533568/document-csv.svg">
-                    <span class="gold-title">CSV Text Data Preprocessor Tool</span>
-                 </div>
+                        <span class="gold-title">CSV Text Data Preprocessor Tool</span>
+                </div>
 
-                 <div class="gold-text">
+                <div class="gold-text">
                      Upload your CSV file and use the sidebar menu to apply preprocessing steps
                 </div>
 
