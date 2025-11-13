@@ -293,6 +293,9 @@ if st.button("Analyze Emotion"):
                 y='Confidence (%)',
                 color="#E6652B" 
             )
+            # --- Display Interventions ---
+            st.markdown("#### Intervention Suggestions")
+            display_interventions(prediction_results)
 
     else:
         st.warning("Please enter some text to analyze.")
