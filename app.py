@@ -642,7 +642,7 @@ def ui_clean_text_data(df_key):
 # --- Data Preprocessing UI (New Clickable and Left-Aligned Structure) ---
 
 # Use an expander for the "Clickable Title" functionality
-with st.expander(""" <h2 class="title">CSV Text Data Preprocessor Tool</h2> """, expanded=False,unsafe_allow_html=True)
+with st.expander("CSV Text Data Preprocessor Tool", expanded=False):
     st.markdown(
         '<div class="caption-intro">Upload your CSV file and select a step from the navigation bar below to begin.</div>',
         unsafe_allow_html=True
