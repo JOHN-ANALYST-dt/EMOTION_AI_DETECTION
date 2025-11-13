@@ -34,7 +34,8 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 # --- End NLTK Fix ---
 
-# --- Configuration ---
+# --- intervention------
+from intervention import display_interventions
 
 
 PREDICTED_EMOTIONS = [
@@ -45,6 +46,10 @@ PREDICTED_EMOTIONS = [
     'sadness', 
     'surprise'
 ]
+
+
+
+
 # --- CSS INJECTION FUNCTION ---
 def inject_custom_css(file_path):
     """Reads a local CSS file and injects it into the Streamlit app."""
