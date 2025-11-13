@@ -209,3 +209,14 @@ div.st-emotion-cache-1pxx9r4 {
     display: block; 
     margin-bottom: 5px;
 }
+.title{
+     padding: 15px 20px;
+    margin: 25px 0;
+    border-radius: 6px;
+    font-size: 0.9em;
+    line-height: 1.5;
+    font-style: italic;
+    background-color: #17c3c6; 
+    color: #856404;            
+    border: 1px solid #ffeeba; 
+}
