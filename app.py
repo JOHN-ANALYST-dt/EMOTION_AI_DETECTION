@@ -517,13 +517,7 @@ def ui_handle_missing_values(df_key):
     UI and logic for handling missing values in the DataFrame.
     """
     df = st.session_state[df_key]
-    st.subheader(""" <h3 style="text-align: left; color:#2C3E50; font-weight:600; margin-top:0;">
-            1. Handle Missing Values
-        </h3>
-        <hr style="margin-top:-5px; margin-bottom:15px;">
-        """,
-        unsafe_allow_html=True
-        )
+    st.subheader(" 1. Handle Missing Values")
     
     # Show initial state
     missing_summary = df.isnull().sum()
