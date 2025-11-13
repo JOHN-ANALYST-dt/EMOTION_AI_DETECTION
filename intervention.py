@@ -141,4 +141,4 @@ def display_interventions(prediction_results):
         st.success("🎉 **Analysis suggests a positive emotional state (Joy/Happiness)!** Keep up the good work and share your positive energy.")
 
     else:
-        st.info("No strong negative or positive emotion was detected to prompt specific intervention.")
+        st.info("No strong negative or positive emotion was detected to prompt specific intervention.") 

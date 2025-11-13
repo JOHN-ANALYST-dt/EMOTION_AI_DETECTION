@@ -300,7 +300,11 @@ if st.button("Analyze Emotion"):
                     color="#E6652B" 
                 )
             # --- Display Interventions ---
-            st.markdown("#### Intervention Suggestions")
+            st.markdown(""" 
+                        <div class="inter">
+                             Intervention Suggestions
+
+                        </div> """)
             display_interventions(prediction_results)
 
     else:
