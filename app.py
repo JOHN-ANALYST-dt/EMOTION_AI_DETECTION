@@ -628,7 +628,7 @@ def ui_clean_text_data(df_key):
 ###data Preprocessing App###
 
 with st.container(border=True): # border=True adds a visible boundary
-    st.header("""
+    st.markdown("""
               
         <div class="gold-container">
 
