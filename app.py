@@ -278,21 +278,25 @@ if st.button("Analyze Emotion"):
             else:
                 st.info("No strong single emotion predicted. Showing top confidence scores.")
 
-            # Display the full confidence breakdown
-            st.markdown("#### Confidence Breakdown")
-            st.dataframe(
+
+            col1, col2 = st.columns([2, 1])
+            with col1:
+
+                # Display the full confidence breakdown
+                st.markdown("#### Confidence Breakdown")
+                st.dataframe(
                 prediction_results.drop(columns=['Predicted']),
                 hide_index=True
-            )
-            
-            # Optional: Display a bar chart of the top 10 confidences
-            top_confidences = prediction_results.head(10)
-            st.bar_chart(
-                top_confidences,
-                x='Emotion',
-                y='Confidence (%)',
-                color="#E6652B" 
-            )
+                )
+            with col2:
+                # Optional: Display a bar chart of the top 10 confidences
+                top_confidences = prediction_results.head(10)
+                st.bar_chart(
+                 top_confidences,
+                 x='Emotion',
+                    y='Confidence (%)',
+                    color="#E6652B" 
+                )
             # --- Display Interventions ---
             st.markdown("#### Intervention Suggestions")
             display_interventions(prediction_results)
