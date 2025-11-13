@@ -221,46 +221,46 @@ div.st-emotion-cache-1pxx9r4 {
     border: 1px solid #ffeeba; 
 }
 
- :root {
+:root {
             --gold-light: #F4D03F;
             --gold-deep: #D4AC0D;
             --gold-dark: #B7950B;
             --black-soft: #1C1C1C;
             --text-grey: #D5D5D5;
-        }
+}
 
-        .gold-container {
+.gold-container {
             background-color: #111;
             padding: 16px 20px;
             border-radius: 8px;
             border-left: 4px solid var(--gold-deep);
-        }
+}
 
-        .gold-header {
+.gold-header {
             display: flex;
             align-items: center;
             gap: 14px;
             margin-bottom: 5px;
             margin-top: 5px;
-        }
+}
 
-        .gold-icon {
+.gold-icon {
             width: 40px;
             height: 40px;
             filter: drop-shadow(0px 0px 4px var(--gold-dark));
-        }
+}
 
-        .gold-title {
+.gold-title {
             font-size: 24px;
             font-weight: 700;
             background: linear-gradient(90deg, var(--gold-light), var(--gold-dark));
             
             -webkit-text-fill-color: transparent;
-        }
+}
 
-        .gold-text {
+.gold-text {
             font-size: 17px;
             color: var(--text-grey);
             line-height: 1.65;
             margin-top: 10px;
-        }
+            margin-bottom: 10px;}
