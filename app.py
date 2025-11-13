@@ -632,15 +632,15 @@ with st.container(border=True): # border=True adds a visible boundary
               
               <div class="gold-container">
 
-            <div class="gold-header">
-                <img class="gold-icon" 
-                     src="https://www.svgrepo.com/show/533568/document-csv.svg">
-                <span class="gold-title">CSV Text Data Preprocessor Tool</span>
-            </div>
+                 <div class="gold-header">
+                     <img class="gold-icon" 
+                         src="https://www.svgrepo.com/show/533568/document-csv.svg">
+                    <span class="gold-title">CSV Text Data Preprocessor Tool</span>
+                 </div>
 
-            <div class="gold-text">
-                Upload your CSV file and use the sidebar menu to apply preprocessing steps
-            </div>
+                 <div class="gold-text">
+                     Upload your CSV file and use the sidebar menu to apply preprocessing steps
+                </div>
 
         </div>
         """,
