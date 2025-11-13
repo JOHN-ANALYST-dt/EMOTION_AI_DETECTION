@@ -630,7 +630,7 @@ def ui_clean_text_data(df_key):
 with st.container(border=True): # border=True adds a visible boundary
     st.header(" Data Preprocessor Tool")
 
-st.title(" CSV Text Data Preprocessor")
+
 st.markdown(
     '<div class="caption-intro">Upload your CSV file and use the sidebar menu to apply preprocessing steps.</div>',
     unsafe_allow_html=True
