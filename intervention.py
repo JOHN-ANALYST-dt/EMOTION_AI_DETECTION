@@ -6,7 +6,7 @@ import pandas as pd
 # --- INTERVENTION DATA ---
 EMOTION_INTERVENTIONS = {
     'anger': {
-        'title': "🔥 Feeling the Heat? Constructive Ways to Manage Anger",
+        'title': " Constructive Ways to Manage Anger",
         'color': "#FF5733", 
         'Mental': [
                 "**Pause Before You React:** When anger rises, give yourself a few seconds of silence before responding. This brief pause activates your brain’s reasoning center and prevents impulsive reactions.",
