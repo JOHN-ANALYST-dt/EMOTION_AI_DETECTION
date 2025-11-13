@@ -166,7 +166,7 @@ EMOTION_INTERVENTIONS = {
     
             "🌅 **Meditate on God’s Acceptance:** When disgust is self-directed, remind yourself that God’s love is unconditional. *'Nothing can separate us from the love of God that is in Christ Jesus our Lord.' — Romans 8:38-39*",
     
-            "💬 **Speak Words of Renewal:** Say aloud affirmations of spiritual cleansing: ‘I release this burden and receive God’s peace.’ *'If we confess our sins, He is faithful and just to forgive us our sins and to cleanse us from all unrighteousness.' — 1 John 1:9*",
+            "💬 **Speak Words of Renewal:** Say aloud affirmations of spiritual cleansing: ‘I release this burden and receive God’s peace.’ *'If we confess our sins, He is faithful and just to forgive us our sins and to cleanse us from all unrighteousness,AMEN.' — 1 John 1:9*",
     
             "🌿 **Replace Judgment with Compassion:** Pray for a heart that sees others through mercy rather than revulsion. *'Be kind and compassionate to one another, forgiving each other, just as in Christ God forgave you.' — Ephesians 4:32*"
 
