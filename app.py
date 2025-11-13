@@ -287,8 +287,8 @@ if st.button("Analyze Emotion"):
                 st.dataframe(
                 prediction_results.drop(columns=['Predicted']),
                 hide_index=True,
-                width=300,
-                height=150
+                width=350,
+                height=170
                 )
             with col2:
                 # Optional: Display a bar chart of the top 10 confidences
