@@ -645,7 +645,7 @@ with st.container(border=True): # border=True adds a visible boundary
         </div>
         """,
         unsafe_allow_html=True
-    )
+)
    
 
 # --- File Uploader ---
