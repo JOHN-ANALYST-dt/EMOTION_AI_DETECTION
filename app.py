@@ -517,16 +517,22 @@ def ui_handle_missing_values(df_key):
     UI and logic for handling missing values in the DataFrame.
     """
     df = st.session_state[df_key]
-    st.subheader("🧹 1. Handle Missing Values")
+    st.subheader(""" <h3 style="text-align: left; color:#2C3E50; font-weight:600; margin-top:0;">
+            1. Handle Missing Values
+        </h3>
+        <hr style="margin-top:-5px; margin-bottom:15px;">
+        """,
+        unsafe_allow_html=True
+        )
     
     # Show initial state
     missing_summary = df.isnull().sum()
     missing_data = missing_summary[missing_summary > 0]
     
     if missing_data.empty:
-        st.success("✅ No missing values found in the DataFrame!")
+        st.success(" No missing values found in the DataFrame!")
     else:
-        st.warning(f"⚠️ Found missing values in {len(missing_data)} column(s).")
+        st.warning(f"Found missing values in {len(missing_data)} column(s).")
         st.dataframe(missing_data.rename("Missing Count"))
         
         st.markdown("#### Select Strategy")
@@ -628,7 +634,7 @@ def ui_clean_text_data(df_key):
 ###data Preprocessing App###
 
 with st.container(border=True): # border=True adds a visible boundary
-    st.header(" Dedicated Data Preprocessor Tool")
+    st.header(" Data Preprocessor Tool")
 
 st.title(" CSV Text Data Preprocessor")
 st.markdown(
