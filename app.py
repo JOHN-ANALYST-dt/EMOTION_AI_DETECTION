@@ -54,20 +54,16 @@ PREDICTED_EMOTIONS = [
 def inject_custom_css(file_path):
     """Reads a local CSS file and injects it into the Streamlit app."""
     try:
-        # Note: 'style.css' is not provided, assuming it exists or using inline style as fallback in a real environment
-        # For this script, we'll assume it exists to prevent errors.
-        # However, since I cannot create 'style.css' here, I will comment out the file loading and add a placeholder.
-        # If running this locally, ensure you have a style.css file.
-        # with open(file_path) as f:
-        #     st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-        pass # Placeholder for external CSS handling
+        with open(file_path) as f:
+            # st.markdown injects the CSS wrapped in <style> tags
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
     except FileNotFoundError:
         st.error(f"CSS file not found at path: {file_path}")
     except Exception as e:
         st.error(f"Error injecting CSS: {e}")
 
 # Call the function with the correct path to apply styles immediately
-# inject_custom_css("style.css") # Commented out due to single file constraint and missing file
+inject_custom_css("style.css")
 st.set_page_config(
     page_title="CareEmotion AI",
     layout="centered"
@@ -80,7 +76,6 @@ def load_artifacts():
     """Loads the trained model, vectorizer, and emotion labels."""
     try:
         # NOTE: Using the file names as they appear in your code
-        # For this file to run successfully, these Pkl files MUST exist in the same directory.
         vectorizer = joblib.load("tokenizer.pkl") 
         model = joblib.load('model_lr.pkl') 
         emotion_labels = PREDICTED_EMOTIONS
@@ -97,7 +92,7 @@ def load_artifacts():
             Please ensure these files are in your repository root and committed:
             - `tokenizer.pkl`
             - `model_lr.pkl` 
-            - `emotion_labels.pkl` (The list is hardcoded, but if you used a file, it should be there)
+            - `emotion_labels.pkl`
         """)
         st.stop()
 
@@ -114,8 +109,6 @@ emoji_pattern = re.compile(
 def preprocess(text):
     """
     Cleans and preprocesses text using the same logic as the training notebook.
-    This function relies on the globally loaded variables: 
-    emoji_pattern, stop_words, and lemmatizer.
     """
     # remove emoji
     text = emoji_pattern.sub(r'', text)
@@ -169,10 +162,10 @@ def predict_emotion(text):
         st.error(f"""
             **Data Length Mismatch Error: Cannot Create Results Table**
             The number of emotion labels does not match the model's output size.
-            - Length of Expected Labels: {len_labels}
+            - Length of `emotion_labels.pkl`: {len_labels}
             - Length of Model Predictions: {len_predictions}
             
-            **Action Required:** You must ensure your emotion labels list has the exact same number of labels ({len_predictions}) that your `model_lr.pkl` was trained to predict.
+            **Action Required:** You must re-save your `emotion_labels.pkl` file to ensure it contains the exact same number of labels ({len_predictions}) that your `model_lr.pkl` was trained to predict.
         """)
         return None
     # Create a DataFrame for display
@@ -193,62 +186,9 @@ def predict_emotion(text):
 
 
 # --- 4. Streamlit UI Design ---
-# Inject minimal required styles for elements that rely on specific classes, 
-# as external style.css is not available.
-st.markdown("""
-<style>
-.main-title { 
-    text-align: center; 
-    padding: 10px 0;
-    color: #E6652B; /* Gold-like color for emphasis */
-}
-.caption-intro { 
-    text-align: center; 
-    margin-bottom: 20px; 
-    color: #333;
-}
-.arrow-pointer {
-    text-align: center;
-    font-size: 1.2em;
-    margin: 15px 0;
-    color: #4CAF50;
-}
-.inter {
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #007BFF;
-    border-bottom: 2px solid #007BFF;
-    margin-top: 20px;
-    padding-bottom: 5px;
-}
-.gold-container {
-    border: 2px solid #FFD700;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 20px;
-    background-color: #FFFBE6;
-}
-.gold-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-.gold-icon {
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-}
-.gold-title {
-    font-size: 1.4em;
-    font-weight: bold;
-    color: #B8860B;
-}
-.gold-text {
-    color: #666;
-    font-size: 0.9em;
-}
-</style>
-""", unsafe_allow_html=True)
+
+
+
 
 
 st.markdown(
@@ -290,7 +230,6 @@ st.markdown(
     """
     <script>
     // Apply custom CSS class to Streamlit textarea
-    // This script might not work reliably in all Streamlit environments, but kept as per original.
     var textareas = window.parent.document.querySelectorAll('textarea');
     if (textareas.length > 0) {
         textareas[textareas.length - 1].classList.add('custom-textarea');
@@ -308,7 +247,7 @@ if st.button("Check Input"):
         st.warning("Input is empty. Please enter some text.")
     
     # 4. Check if the input contains ONLY numeric characters
-    
+  
 
     elif user_input.strip().isnumeric():
         # Display the warning message to the user on the web page (using st.error or st.warning)
@@ -355,10 +294,10 @@ if st.button("Analyze Emotion"):
                 # Optional: Display a bar chart of the top 10 confidences
                 top_confidences = prediction_results.head(10)
                 st.bar_chart(
-                   top_confidences,
-                   x='Emotion',
-                       y='Confidence (%)',
-                       color="#E6652B" 
+                 top_confidences,
+                 x='Emotion',
+                    y='Confidence (%)',
+                    color="#E6652B" 
                 )
             # --- Display Interventions ---
             st.markdown(""" 
@@ -368,9 +307,7 @@ if st.button("Analyze Emotion"):
                         </div> """,
                         unsafe_allow_html=True
                         )
-            # Note: display_interventions needs the 'intervention.py' file to be available
-            # display_interventions(prediction_results) 
-            # I cannot run this without intervention.py, so leaving the call as is.
+            display_interventions(prediction_results)
 
     else:
         st.warning("Please enter some text to analyze.")
@@ -655,14 +592,18 @@ def ui_clean_text_data(df_key):
     if cleaning_action == "Create New Column":
         new_col_name = st.text_input("New Column Name:", value=new_col_name)
 
-    # --- RECTIFIED MISTAKE HERE ---
+    # Make the preprocess function accessible with its dependencies
+    # The original function was 'def preprocess(text):' and used globals.
+    # The updated version 'def preprocess(text, stop_words, lemmatizer, emoji_pattern):' is safer.
+    # We now access the global NLTK components defined in load_artifacts()
+    
     if st.button(f"Apply Preprocessing to **{col_to_clean}**"):
         try:
             with st.spinner(f"Cleaning text in column **{col_to_clean}**... This may take a moment."):
                 
-                # The preprocess function uses global variables and only takes the text argument (x)
+                # Apply the preprocessing function (passing the required global artifacts)
                 processed_series = df[col_to_clean].apply(
-                    lambda x: preprocess(x)
+                    lambda x: preprocess(x, stop_words, lemmatizer, emoji_pattern)#x, stop_words, lemmatizer, emoji_pattern
                 )
 
             # Update the DataFrame in session state
@@ -701,7 +642,7 @@ with st.container(border=True): # border=True adds a visible boundary
         """,
         unsafe_allow_html=True
     )
-    
+   
 
 # --- File Uploader ---
 uploaded_file = st.file_uploader("Choose a CSV file...", type="csv")
@@ -776,5 +717,5 @@ else:
 st.markdown("---")
 st.markdown(
     "This model is a multi-label classifier trained on the GoEmotions dataset."
-    
+   
 )
