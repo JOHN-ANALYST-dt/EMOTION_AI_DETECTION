@@ -126,40 +126,40 @@ div.st-emotion-cache-1pxx9r4 {
     padding-right: -0.4rem;
 }
 .inter{
-    background-color: #4CAF50; /* A pleasant green, similar to success buttons */
-    color: white; /* White text for contrast */
-    padding: 12px 20px; /* Vertical and horizontal padding */
-    border-radius: 8px; /* Slightly rounded corners */
-    text-align: center; /* Center the text */
-    font-size: 1.5em; /* Larger font size */
-    font-weight: bold; /* Bold text */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effects */
-    cursor: default; /* Indicate it's not a clickable button, but a styled header */
-    display: flex; /* Use flexbox for icon and text alignment */
-    align-items: center; /* Vertically center icon and text */
-    justify-content: center; /* Horizontally center content */
-    gap: 10px; /* Space between icon and text */
-    margin-bottom: 25px; /* Add some space below it */
-    margin-top: 20px; /* Add space above it if needed */
+    background-color: #4CAF50; 
+    color: white; 
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-align: center; 
+    font-size: 1.5em; 
+    font-weight: bold; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: default; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 10px; 
+    margin-bottom: 25px; 
+    margin-top: 20px; 
 }
 .inter:hover {
-    background-color: #45a049; /* Darker green on hover */
-    transform: translateY(-2px); /* Slight lift on hover */
+    background-color: #45a049; 
+    transform: translateY(-2px);
 }
 /* Optional: Add an icon before the text */
 .inter::before {
-    content: "💡"; /* Light bulb icon */
-    font-size: 1.5em; /* Size of the icon */
+    content: "💡"; 
+    font-size: 1.5em; 
 }
 /* Responsive adjustments */
 @media (max-width: 600px) { 
     .inter {
-        font-size: 1.2em; /* Slightly smaller font on small screens */
-        padding: 10px 15px; /* Adjust padding for smaller screens */
+        font-size: 1.2em; 
+        padding: 10px 15px; 
     }
     .inter::before {
-        font-size: 1.2em; /* Adjust icon size for smaller screens */
+        font-size: 1.2em; 
     }
 }
 /* Style for dataframes */
