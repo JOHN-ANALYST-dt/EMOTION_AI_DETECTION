@@ -264,18 +264,3 @@ div.st-emotion-cache-1pxx9r4 {
             line-height: 1.65;
             margin-top: 10px;
             margin-bottom: 10px;}
-with st.container(border=True): # border=True adds a visible boundary
-    st.markdown("""
-        <div class="gold-container">
-            <div class="gold-header">
-                <img class="gold-icon" 
-                    src="https://www.svgrepo.com/show/533568/document-csv.svg">
-                <span class="gold-title">CSV Text Data Preprocessor Tool</span>
-            </div>
-            <div class="gold-text">
-                Upload your CSV file and use the sidebar menu to apply preprocessing steps
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )

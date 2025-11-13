@@ -631,8 +631,7 @@ with st.container(border=True): # border=True adds a visible boundary
     st.markdown("""
         <div class="gold-container">
             <div class="gold-header">
-                <img class="gold-icon" 
-                    src="https://www.svgrepo.com/show/533568/document-csv.svg">
+                <img class="gold-icon" src="https://www.svgrepo.com/show/533568/document-csv.svg">
                     <span class="gold-title">CSV Text Data Preprocessor Tool</span>
             </div>
             <div class="gold-text">
