@@ -642,7 +642,7 @@ def ui_clean_text_data(df_key):
 # --- Data Preprocessing UI (New Clickable and Left-Aligned Structure) ---
 
 # Use an expander for the "Clickable Title" functionality
-with st.expander("📁 CSV Text Data Preprocessor Tool", expanded=False):
+with st.expander(""" <h2 class="text-4xl font-extrabold text-indigo-800 border-b-4 border-indigo-400 pb-2 text-left">CSV Text Data Preprocessor Tool</h2> """, expanded=False):
     st.markdown(
         '<div class="caption-intro">Upload your CSV file and select a step from the navigation bar below to begin.</div>',
         unsafe_allow_html=True
@@ -692,7 +692,7 @@ with st.expander("📁 CSV Text Data Preprocessor Tool", expanded=False):
         with col_content:
             # --- Main Content Area Logic ---
             if processing_step == "View Raw Data":
-                st.subheader("🔍 Current Data View")
+                st.subheader(" Current Data View")
                 st.info(f"Loaded DataFrame has {df.shape[0]} rows and {df.shape[1]} columns.")
                 st.dataframe(df.head(20))
                 
