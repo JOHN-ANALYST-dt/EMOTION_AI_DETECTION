@@ -310,13 +310,14 @@ def display_interventions(prediction_results):
 
         # Final Disclaimer
         st.markdown("""
+                    <div class="disc">
+                    <strong>Disclaimer:</strong> 
+                    </div>   
+
         "💬 **Friendly Reminder:** These interventions are designed to support your emotional, mental, physical, and spiritual well-being. They are helpful tools, but they do not replace professional medical, psychological, or psychiatric care. If your feelings are overwhelming, persistent, or interfere with daily life, please reach out to a licensed healthcare provider for guidance and support.",
-    
-        "💡 **Gentle Note:** Everyone’s experience is unique. Use these strategies in ways that feel safe and comfortable for you. It’s okay to pause, adapt, or skip any intervention that doesn’t feel right at the moment.",
-    
-        "🧡 **Take Care of Yourself:** Emotional health is a journey. These practices are here to guide and support you, but seeking professional help when needed is a sign of strength, not weakness."
                     
-        """)
+        """, unsafe_allow_html=True
+                    )
     # If the only predicted emotion is Joy or Surprise (or no negative is strong)
     elif 'joy' in target_results['Emotion'].values:
         st.success("🎉 **Analysis suggests a positive emotional state (Joy/Happiness)!** Keep up the good work and share your positive energy.")

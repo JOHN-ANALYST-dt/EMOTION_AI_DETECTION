@@ -186,3 +186,26 @@ div.st-emotion-cache-1pxx9r4 {
 .stDataFrame tr:hover {
     background-color: #f1f1f1; /* Slightly darker gray on hover */
 }
+
+.disc {
+    
+    padding: 15px 20px;
+    margin: 25px 0;
+    border-radius: 6px;
+    font-size: 0.9em;
+    line-height: 1.5;
+    font-style: italic;
+
+    background-color: #fff3cd; 
+    color: #856404;            
+    border: 1px solid #ffeeba; 
+}
+
+/* Optional: Style for the "Disclaimer" title */
+.disc strong {
+    font-style: normal; 
+    font-weight: bold;
+    text-transform: uppercase;
+    display: block; 
+    margin-bottom: 5px;
+}
