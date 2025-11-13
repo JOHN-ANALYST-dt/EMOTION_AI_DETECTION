@@ -304,7 +304,9 @@ if st.button("Analyze Emotion"):
                         <div class="inter">
                              Intervention Suggestions
 
-                        </div> """)
+                        </div> """
+                        unsafe_allow_html=True
+                        )
             display_interventions(prediction_results)
 
     else:
