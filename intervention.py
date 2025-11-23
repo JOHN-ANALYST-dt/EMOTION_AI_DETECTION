@@ -303,7 +303,7 @@ def display_interventions(prediction_results):
     """
     
     # Define negative emotions for targeting interventions
-    NEGATIVE_EMOTIONS = ['anger', 'sadness', 'fear', 'disgust']
+    NEGATIVE_EMOTIONS = ['anger', 'sadness', 'fear', 'disgust',"joy"]
     
     # Ensure prediction_results is a DataFrame and not empty
     if not isinstance(prediction_results, pd.DataFrame) or prediction_results.empty:

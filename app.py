@@ -76,8 +76,8 @@ def load_artifacts():
     """Loads the trained model, vectorizer, and emotion labels."""
     try:
         # NOTE: Using the file names as they appear in your code
-        vectorizer = joblib.load("tokenizer.pkl") 
-        model = joblib.load('model_lr.pkl') 
+        vectorizer = joblib.load("MODELS/tokenizer.pkl") 
+        model = joblib.load('MODELS/model_lr.pkl') 
         emotion_labels = PREDICTED_EMOTIONS
         
         # Initialize NLTK components now that the resources are guaranteed to be downloaded
@@ -222,7 +222,7 @@ st.markdown(
 # Text input widget
 user_input = st.text_area(
     "Enter Text Here:",
-    placeholder="e.g., Hello church! God is good😊",
+    placeholder="e.g., in the beginning God created the heaven and the earth ",
     height=150
 )
 
@@ -426,7 +426,7 @@ with st.sidebar:
     if ctx.state.playing:
         st_webrtc_status.success("🟢 **Recording/Streaming** (Click **Stop** on the widget to pause)")
     else:
-        st_webrtc_status.info("🎤 Click the **Start** button above to begin recording.")
+        st_webrtc_status.info(" Click the **Start** button above to begin recording.")
 
 
 
